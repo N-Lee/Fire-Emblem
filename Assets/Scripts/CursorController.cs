@@ -26,6 +26,7 @@ public class CursorController : MonoBehaviour
         MouseMove();
     }
 
+    #region Controller Option
     void ControllerMove()
     {
         if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
@@ -43,7 +44,9 @@ public class CursorController : MonoBehaviour
 
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
     }
+    #endregion
 
+    #region Mouse Option
     void MouseMove()
     {
         Vector3Int mousePos = GetMousePosition();
@@ -60,4 +63,5 @@ public class CursorController : MonoBehaviour
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         return grid.WorldToCell(mouseWorldPos);
     }
+    #endregion
 }
