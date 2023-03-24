@@ -1,0 +1,566 @@
+fileFormatVersion: 2
+guid: 12ccae82edf048e41a09813fa611aada
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Lyn Lord Map_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 109
+        width: 15
+        height: 14
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cdc76babe55eaf4280ccceea975928e
+      internalID: -1195240210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_1
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 108
+        width: 14
+        height: 15
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d6c5bd7385c9804087dbc8c48cdcfa6
+      internalID: 2009084624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_2
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 109
+        width: 16
+        height: 15
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65c0ca9bd336707ba85d6e12ec5327da
+      internalID: -906938393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_3
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 86
+        width: 18
+        height: 17
+      alignment: 9
+      pivot: {x: 0.29968536, y: 0.6760806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a82556470b9c7f8f1a91aafefdd9a43d
+      internalID: -830143248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_4
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 86
+        width: 18
+        height: 18
+      alignment: 9
+      pivot: {x: 0.30346447, y: 0.6927541}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3475ed8b76991bc8a9f1c47a8632e3f
+      internalID: -1521192617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_5
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 86
+        width: 18
+        height: 18
+      alignment: 9
+      pivot: {x: 0.29968515, y: 0.69653445}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c48e00559d60da25d99bad92a4c8e6bc
+      internalID: 182373862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_6
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 86
+        width: 19
+        height: 18
+      alignment: 9
+      pivot: {x: 0.3424534, y: 0.69653445}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ef5e799bd91fd3acaa453f5c119680e
+      internalID: -1386787172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_7
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 65
+        width: 17
+        height: 16
+      alignment: 9
+      pivot: {x: 0.79650813, y: 0.71859884}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ab4c6b8fda8620dd9cd5b52647af61f
+      internalID: 1697416888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_8
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 65
+        width: 19
+        height: 16
+      alignment: 9
+      pivot: {x: 0.7084475, y: 0.71859884}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c387b81372832cfe98f9f77074302bf
+      internalID: -966282115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_9
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 65
+        width: 17
+        height: 16
+      alignment: 9
+      pivot: {x: 0.7965083, y: 0.7153845}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f114d2f53906dffbab44e770113770df
+      internalID: -1082758173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_10
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 65
+        width: 18
+        height: 16
+      alignment: 9
+      pivot: {x: 0.748603, y: 0.7153845}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 710f718ce78eabc978030196f89594fa
+      internalID: 92907857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_11
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 65
+        width: 17
+        height: 16
+      alignment: 9
+      pivot: {x: 0.7934826, y: 0.71859884}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93399a8da496b1396a1e16b74aa410e9
+      internalID: 672177317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_12
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 46
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.3392653, y: 0.65430546}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60235aa012b5cb24188e2a63bd0d262a
+      internalID: -1239754783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_13
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 46
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.34247994, y: 0.66073465}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 393f4718fc5d1b12895d47005093424b
+      internalID: 1930634821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_14
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 46
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.34569454, y: 0.65430546}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97caae2964c0a5d30a4c62b905a2f5e0
+      internalID: 247630763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_15
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 46
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.34569454, y: 0.65430546}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 686c119cedbd4c422ac1e69857aa49e7
+      internalID: 613435583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_16
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 22
+        width: 15
+        height: 15
+      alignment: 9
+      pivot: {x: 0.49999994, y: 0.7690468}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d676f93c104eeb3f80cc92cbed10891
+      internalID: 832306399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_17
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 21
+        width: 14
+        height: 19
+      alignment: 9
+      pivot: {x: 0.47032574, y: 0.65618056}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c09a43971ccdeaddb5f35ef950c527e
+      internalID: -1569146339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lyn Lord Map_18
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 21
+        width: 14
+        height: 19
+      alignment: 9
+      pivot: {x: 0.4618473, y: 0.65618056}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff09e20299d67149bb89c85fbd9a26c3
+      internalID: -1654893602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Lyn Lord Map_0: -1195240210
+      Lyn Lord Map_1: 2009084624
+      Lyn Lord Map_10: 92907857
+      Lyn Lord Map_11: 672177317
+      Lyn Lord Map_12: -1239754783
+      Lyn Lord Map_13: 1930634821
+      Lyn Lord Map_14: 247630763
+      Lyn Lord Map_15: 613435583
+      Lyn Lord Map_16: 832306399
+      Lyn Lord Map_17: -1569146339
+      Lyn Lord Map_18: -1654893602
+      Lyn Lord Map_19: 1681734643
+      Lyn Lord Map_2: -906938393
+      Lyn Lord Map_3: -830143248
+      Lyn Lord Map_4: -1521192617
+      Lyn Lord Map_5: 182373862
+      Lyn Lord Map_6: -1386787172
+      Lyn Lord Map_7: 1697416888
+      Lyn Lord Map_8: -966282115
+      Lyn Lord Map_9: -1082758173
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
