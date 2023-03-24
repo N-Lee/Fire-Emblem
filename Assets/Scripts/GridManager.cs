@@ -32,13 +32,22 @@ public class GridManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int gridPosition = ground.WorldToCell(mouseWorldPos);
-            
-            TileBase clickedTile = ground.GetTile(gridPosition);
 
-            bool isWalkable = dataFromTiles[clickedTile].isWalkable;
+            Collider2D targetObject = Physics2D.OverlapPoint(mouseWorldPos);
+            if (targetObject && targetObject.transform.gameObject.tag == "Player")
+            {
+                Debug.Log(targetObject.transform.gameObject.name);
+            }
+            else
+            {
+                Vector3Int gridPosition = ground.WorldToCell(mouseWorldPos);
+                
+                TileBase clickedTile = ground.GetTile(gridPosition);
 
-            Debug.Log("Is " + clickedTile + " walkable: " + isWalkable);
+                bool isWalkable = dataFromTiles[clickedTile].isWalkable;
+
+                Debug.Log("Is " + clickedTile + " walkable: " + isWalkable);
+            }
         }
     }
 }
