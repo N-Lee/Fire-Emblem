@@ -11,17 +11,21 @@ public class CursorController : MonoBehaviour
     [SerializeField] Tilemap cursorMap = null;
     [SerializeField] Tile cursorTile = null;
     Vector3Int previousMousePos = new Vector3Int();
+    public bool isSelected {get; set;}
 
     // Start is called before the first frame update
     void Start()
     {
         movePoint.parent = null;
+        isSelected = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        MouseMove();
+        Vector3Int mousePos = GetMousePosition();
+        MouseMove(mousePos);
+        MouseClick(mousePos);
     }
 
     #region Controller Option
@@ -45,14 +49,20 @@ public class CursorController : MonoBehaviour
     #endregion
 
     #region Mouse Option
-    void MouseMove()
+    void MouseMove(Vector3Int mousePos)
     {
-        Vector3Int mousePos = GetMousePosition();
-        if (!mousePos.Equals(previousMousePos))
+        if (isSelected)
         {
-            cursorMap.SetTile(previousMousePos, null);
-            cursorMap.SetTile(mousePos, cursorTile);
-            previousMousePos = mousePos;
+            
+        }
+        else
+        {
+            if (!mousePos.Equals(previousMousePos))
+            {
+                cursorMap.SetTile(previousMousePos, null);
+                cursorMap.SetTile(mousePos, cursorTile);
+                previousMousePos = mousePos;
+            }
         }
     }
 
@@ -60,6 +70,20 @@ public class CursorController : MonoBehaviour
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         return cursorMap.WorldToCell(mouseWorldPos);
+    }
+
+    void MouseClick(Vector3Int mousePos)
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            isSelected = true;
+            cursorMap.SetTile(previousMousePos, null);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            isSelected = false;
+        }
     }
     #endregion
 }

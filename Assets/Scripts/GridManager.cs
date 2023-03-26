@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+enum UserPhase {Map, CharacterMove, CharacterAction, ActionTarget, Battle};
+
 public class GridManager : MonoBehaviour
 {
-
-    
-    [SerializeField] private Tilemap ground;
-    [SerializeField] private List<TileData> tileDatas;
+    UserPhase userPhase;
+    [SerializeField] CursorController cursorController;
+    [SerializeField] Tilemap groundTileMap, debugTileMap;
+    [SerializeField] List<TileData> tileDatas;
     private Dictionary<TileBase, TileData> dataFromTiles;
-
+    AStar astar;
 
     // Start is called before the first frame update
     void Start()
     {
         dataFromTiles = new Dictionary<TileBase, TileData>();
+        userPhase = UserPhase.Map;
 
         foreach (var tileData in tileDatas)
         {
@@ -24,30 +27,81 @@ public class GridManager : MonoBehaviour
                 dataFromTiles.Add(tile, tileData);
             }
         }
+
+        astar = new AStar();
+        astar.groundTileMap = groundTileMap;
+        astar.dataFromTiles = dataFromTiles;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        MouseClick();
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            Collider2D targetObject = Physics2D.OverlapPoint(mouseWorldPos);
-            if (targetObject && targetObject.transform.gameObject.tag == "Player")
-            {
-                Debug.Log(targetObject.transform.gameObject.name);
-            }
-            else
-            {
-                Vector3Int gridPosition = ground.WorldToCell(mouseWorldPos);
-                
-                TileBase clickedTile = ground.GetTile(gridPosition);
-
-                bool isWalkable = dataFromTiles[clickedTile].isWalkable;
-
-                Debug.Log("Is " + clickedTile + " walkable: " + isWalkable);
-            }
+           astar.Algorithm();
         }
     }
+
+    void MouseClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            
+
+            switch (userPhase)
+            {
+                case UserPhase.Map:
+                    MapPhase(mousePos);
+                    break;
+                
+                case UserPhase.CharacterMove:
+                    CharacterMovePhase(mousePos);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+        }
+    }
+
+    void MapPhase(Vector3 mousePos)
+    {
+        Collider2D targetObject = Physics2D.OverlapPoint(mousePos);
+
+        if (targetObject && targetObject.transform.gameObject.tag == "Player")
+        {
+            Debug.Log(targetObject.transform.gameObject.name);
+        }
+        else
+        {
+            Vector3Int gridPosition = groundTileMap.WorldToCell(mousePos);
+            TileBase clickedTile = groundTileMap.GetTile(gridPosition);
+            bool isWalkable = dataFromTiles[clickedTile].isWalkable;
+
+            Debug.Log("Is " + clickedTile + " walkable: " + isWalkable);
+        }
+
+        astar.startPos = debugTileMap.WorldToCell(mousePos);
+
+        userPhase = UserPhase.CharacterMove;
+    }
+
+    void CharacterMovePhase(Vector3 mousePos)
+    {
+        astar.goalPos = debugTileMap.WorldToCell(mousePos);
+
+        Vector3Int gridPosition = groundTileMap.WorldToCell(mousePos);
+        TileBase clickedTile = groundTileMap.GetTile(gridPosition);
+
+        userPhase = UserPhase.Map;
+        cursorController.isSelected = true;
+    }
+
 }
