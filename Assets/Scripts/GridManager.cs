@@ -13,6 +13,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] List<TileData> tileDatas;
     private Dictionary<TileBase, TileData> dataFromTiles;
     AStar astar;
+    MovementController movementController;
+    Vector3Int startPos, goalPos;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,10 @@ public class GridManager : MonoBehaviour
         astar = new AStar();
         astar.groundTileMap = groundTileMap;
         astar.dataFromTiles = dataFromTiles;
+
+        movementController = new MovementController();
+        movementController.groundTilemap = groundTileMap;
+        movementController.dataFromTiles = dataFromTiles;
     }
 
     // Update is called once per frame
@@ -40,7 +46,7 @@ public class GridManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-           astar.Algorithm();
+           astar.Algorithm(startPos, goalPos);
         }
     }
 
@@ -85,17 +91,20 @@ public class GridManager : MonoBehaviour
             TileBase clickedTile = groundTileMap.GetTile(gridPosition);
             bool isWalkable = dataFromTiles[clickedTile].isWalkable;
 
-            Debug.Log("Is " + clickedTile + " walkable: " + isWalkable);
+            //Debug.Log("Is " + clickedTile + " walkable: " + isWalkable);
+            Debug.Log("Clicked: " + gridPosition);
         }
 
-        astar.startPos = debugTileMap.WorldToCell(mousePos);
+        startPos = debugTileMap.WorldToCell(mousePos);
+        movementController.startPos = startPos;
+        movementController.Algorithm(3);
 
         userPhase = UserPhase.CharacterMove;
     }
 
     void CharacterMovePhase(Vector3 mousePos)
     {
-        astar.goalPos = debugTileMap.WorldToCell(mousePos);
+        goalPos = debugTileMap.WorldToCell(mousePos);
 
         Vector3Int gridPosition = groundTileMap.WorldToCell(mousePos);
         TileBase clickedTile = groundTileMap.GetTile(gridPosition);

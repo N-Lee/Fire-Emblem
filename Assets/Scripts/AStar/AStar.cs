@@ -15,16 +15,6 @@ public class AStar : Tile
     Node currentNode;
     public Dictionary<TileBase, TileData> dataFromTiles {get; set;}
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     private void Initialize()
     {
         currentNode = GetNode(startPos);
@@ -34,12 +24,18 @@ public class AStar : Tile
         closedList = new HashSet<Node>();
     }
 
-
-    public void Algorithm()
+    public void Algorithm(Vector3Int start, Vector3Int goal)
     {
         if (currentNode == null)
         {
+            startPos = start;
+            goalPos = goal;
             Initialize();
+        }
+        else
+        {
+            openList.Clear();
+            closedList.Clear();
         }
 
         while (openList.Count > 0 && path == null)
@@ -99,7 +95,6 @@ public class AStar : Tile
             else if (!closedList.Contains(neighbour))
             {
                 CalculateValues(current, neighbour, g);
-
                 openList.Add(neighbour);
             }
         }

@@ -66,6 +66,14 @@ public class AStarDebugger : MonoBehaviour
         }
     }
 
+    public void ColourMove(HashSet<Node> list)
+    {
+        foreach (Node node in list)
+        {
+            ColourTile(node.Position, closedColour);
+        }
+    }
+
     private void GenerateDebugText(Node node, DebugText debugText)
     {
         debugText.P.text = $"F:{node.Position.x},{node.Position.y}";
