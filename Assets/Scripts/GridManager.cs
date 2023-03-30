@@ -9,12 +9,15 @@ public class GridManager : MonoBehaviour
 {
     UserPhase userPhase;
     [SerializeField] CursorController cursorController;
-    [SerializeField] Tilemap groundTileMap, debugTileMap;
+    [SerializeField] Tilemap groundTilemap, moveTilemap;
     [SerializeField] List<TileData> tileDatas;
-    private Dictionary<TileBase, TileData> dataFromTiles;
+    [SerializeField] List<Tile> tiles;
+    Dictionary<TileBase, TileData> dataFromTiles;
+    HashSet<Node> movementNodes = new HashSet<Node>();
     AStar astar;
     MovementController movementController;
     Vector3Int startPos, goalPos;
+    bool isArrowDrawn = false;
 
     // Start is called before the first frame update
     void Start()
@@ -31,11 +34,11 @@ public class GridManager : MonoBehaviour
         }
 
         astar = new AStar();
-        astar.groundTileMap = groundTileMap;
+        astar.groundTilemap = groundTilemap;
         astar.dataFromTiles = dataFromTiles;
 
         movementController = new MovementController();
-        movementController.groundTilemap = groundTileMap;
+        movementController.groundTilemap = groundTilemap;
         movementController.dataFromTiles = dataFromTiles;
     }
 
@@ -46,71 +49,84 @@ public class GridManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-           astar.Algorithm(startPos, goalPos);
         }
     }
 
     void MouseClick()
     {
-        if (Input.GetMouseButtonDown(0))
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        switch (userPhase)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            case UserPhase.Map:
+                MapPhase(mousePos);
+                break;
             
+            case UserPhase.CharacterMove:
+                CharacterMovePhase(mousePos);
+                break;
 
-            switch (userPhase)
-            {
-                case UserPhase.Map:
-                    MapPhase(mousePos);
-                    break;
-                
-                case UserPhase.CharacterMove:
-                    CharacterMovePhase(mousePos);
-                    break;
-
-                default:
-                    break;
-            }
+            default:
+                break;
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-        }
     }
 
     void MapPhase(Vector3 mousePos)
     {
-        Collider2D targetObject = Physics2D.OverlapPoint(mousePos);
-
-        if (targetObject && targetObject.transform.gameObject.tag == "Player")
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log(targetObject.transform.gameObject.name);
+            Collider2D targetObject = Physics2D.OverlapPoint(mousePos);
+
+            if (targetObject && targetObject.transform.gameObject.tag == "Player")
+            {
+                startPos = moveTilemap.WorldToCell(mousePos);
+                movementController.startPos = startPos;
+                movementNodes = movementController.GetMovementTiles(5);
+                userPhase = UserPhase.CharacterMove;
+                cursorController.ShowCursor(false);
+            }
+            else
+            {
+                Vector3Int gridPosition = groundTilemap.WorldToCell(mousePos);
+                TileBase clickedTile = groundTilemap.GetTile(gridPosition);
+                bool isWalkable = dataFromTiles[clickedTile].isWalkable;
+            }
         }
-        else
-        {
-            Vector3Int gridPosition = groundTileMap.WorldToCell(mousePos);
-            TileBase clickedTile = groundTileMap.GetTile(gridPosition);
-            bool isWalkable = dataFromTiles[clickedTile].isWalkable;
-
-            //Debug.Log("Is " + clickedTile + " walkable: " + isWalkable);
-            Debug.Log("Clicked: " + gridPosition);
-        }
-
-        startPos = debugTileMap.WorldToCell(mousePos);
-        movementController.startPos = startPos;
-        movementController.Algorithm(3);
-
-        userPhase = UserPhase.CharacterMove;
     }
 
     void CharacterMovePhase(Vector3 mousePos)
     {
-        goalPos = debugTileMap.WorldToCell(mousePos);
+        Vector3Int gridPosition = groundTilemap.WorldToCell(mousePos);
+        Node currentNode = movementController.GetNode(gridPosition);
 
-        Vector3Int gridPosition = groundTileMap.WorldToCell(mousePos);
-        TileBase clickedTile = groundTileMap.GetTile(gridPosition);
+        if (gridPosition != goalPos && movementNodes.Contains(currentNode) && startPos != gridPosition)
+        {
+            if (isArrowDrawn)
+            {
+                astar.Reset();
+                isArrowDrawn = false;
+            }
 
-        userPhase = UserPhase.Map;
-        cursorController.isSelected = true;
+            goalPos = gridPosition;
+
+            TileBase hoveredTile = groundTilemap.GetTile(gridPosition);
+            astar.Algorithm(startPos, goalPos, tiles);
+            isArrowDrawn = true;
+        }
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            userPhase = UserPhase.Map;
+        }
     }
 
+    void DebugAStar()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+           astar.Algorithm(startPos, goalPos, tiles);
+        }
+    }
 }

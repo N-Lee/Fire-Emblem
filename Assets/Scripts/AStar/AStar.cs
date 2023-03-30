@@ -6,48 +6,46 @@ using UnityEngine.Tilemaps;
 
 public class AStar : Tile
 {
-    public Tilemap groundTileMap {get; set;}
+    List<Tile> tiles;
+    public Tilemap groundTilemap {get; set;}
     public Vector3Int startPos {get; set;}
     public Vector3Int goalPos {get; set;}
     HashSet<Node> openList, closedList;
-    Stack<Vector3Int> path;
+    HashSet<Vector3Int> changedTiles = new HashSet<Vector3Int>();
+    Dictionary<Vector3Int, Node> path;
     Dictionary<Vector3Int, Node> allNodes = new Dictionary<Vector3Int, Node>();
-    Node currentNode;
+    Node current;
     public Dictionary<TileBase, TileData> dataFromTiles {get; set;}
 
     private void Initialize()
     {
-        currentNode = GetNode(startPos);
+        current = GetNode(startPos);
 
         openList = new HashSet<Node>();
-        openList.Add(currentNode);
+        openList.Add(current);
         closedList = new HashSet<Node>();
     }
 
-    public void Algorithm(Vector3Int start, Vector3Int goal)
+    public void Algorithm(Vector3Int start, Vector3Int goal, List<Tile> tiles)
     {
-        if (currentNode == null)
+        if (current == null)
         {
             startPos = start;
             goalPos = goal;
             Initialize();
-        }
-        else
-        {
-            openList.Clear();
-            closedList.Clear();
+            this.tiles = tiles;
         }
 
         while (openList.Count > 0 && path == null)
         {
-            List<Node> neighbours = FindNeighbours(currentNode.Position);
-            ExamineNeighbours(neighbours, currentNode);
+            List<Node> neighbours = FindNeighbours(current.Position);
+            ExamineNeighbours(neighbours, current);
 
-            UpdateCurrentTile(ref currentNode);
-            path = GeneratePath(currentNode);
+            UpdateCurrentTile(ref current);
+            path = GeneratePath(current);
         }
 
-        AStarDebugger.myInstance.CreateTiles(openList, closedList, allNodes, startPos, goalPos, path);
+        MovementDraw.myInstance.DrawArrows(path);
     }
 
     private List<Node> FindNeighbours(Vector3Int parentPosition)
@@ -61,10 +59,10 @@ public class AStar : Tile
                 if (x == 0 || y == 0)
                 {
                     Vector3Int neighbourPos = new Vector3Int(parentPosition.x - x, parentPosition.y - y, parentPosition.z);
-                    TileBase neighbourTile = groundTileMap.GetTile(neighbourPos);
+                    TileBase neighbourTile = groundTilemap.GetTile(neighbourPos);
 
                     if (neighbourPos != startPos
-                    && groundTileMap.GetTile(neighbourPos)
+                    && groundTilemap.GetTile(neighbourPos)
                     && dataFromTiles[neighbourTile].isWalkable)
                     {
                         Node neighbour = GetNode(neighbourPos);
@@ -116,7 +114,7 @@ public class AStar : Tile
         int x = current.x - neighbour.x;
         int y = current.y - neighbour.y;
 
-        TileBase neighbourTile = groundTileMap.GetTile(neighbour);
+        TileBase neighbourTile = groundTilemap.GetTile(neighbour);
         int moveCost = dataFromTiles[neighbourTile].moveCost;
 
         if (Mathf.Abs(x-y) % 2 == 1)
@@ -152,16 +150,15 @@ public class AStar : Tile
         }
     }
 
-    Stack<Vector3Int> GeneratePath(Node current)
+    Dictionary<Vector3Int, Node> GeneratePath(Node current)
     {
         if (current.Position == goalPos)
         {
-            Stack<Vector3Int> finalPath = new Stack<Vector3Int>();
+            Dictionary<Vector3Int, Node> finalPath = new Dictionary<Vector3Int, Node>();
 
             while (current.Position != startPos)
             {
-                finalPath.Push(current.Position);
-
+                finalPath.Add(current.Position, current);
                 current = current.Parent;
             }
 
@@ -171,4 +168,17 @@ public class AStar : Tile
         return null;
     }
 
+    public void Reset()
+    {
+        MovementDraw.myInstance.ResetAStar();
+
+        foreach (Vector3Int position in path.Keys)
+        {
+            groundTilemap.SetTile(position, tiles[0]);
+        }
+
+        allNodes.Clear();
+        path = null;
+        current = null;
+    }
 }

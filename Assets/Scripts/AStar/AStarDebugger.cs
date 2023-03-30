@@ -9,6 +9,8 @@ public class AStarDebugger : MonoBehaviour
     [SerializeField] Tilemap tilemap;
     [SerializeField] Tile tile;
     [SerializeField] Color openColour, closedColour, pathColour, currentColour, startColour, goalColour;
+    Color moveColor = new Color(0,0,255,130);
+    Color attackColor = new Color(255,0,0,130);
     [SerializeField] Canvas canvas;
     [SerializeField] GameObject debugTextPrefeb;
     List<GameObject> debugObjects = new List<GameObject>();
@@ -27,6 +29,7 @@ public class AStarDebugger : MonoBehaviour
         }
     }
 
+    #region A* Debug functions
     public void CreateTiles (HashSet<Node> openList, HashSet<Node> closedList, Dictionary<Vector3Int, Node> allNodes, Vector3Int start, Vector3Int goal, Stack<Vector3Int> path = null)
     {
         foreach (Node node in openList)
@@ -66,14 +69,6 @@ public class AStarDebugger : MonoBehaviour
         }
     }
 
-    public void ColourMove(HashSet<Node> list)
-    {
-        foreach (Node node in list)
-        {
-            ColourTile(node.Position, closedColour);
-        }
-    }
-
     private void GenerateDebugText(Node node, DebugText debugText)
     {
         debugText.P.text = $"F:{node.Position.x},{node.Position.y}";
@@ -83,6 +78,15 @@ public class AStarDebugger : MonoBehaviour
 
         Vector3Int diretion = node.Parent.Position - node.Position;
         debugText.MyArrow.localRotation = Quaternion.Euler(0, 0, Mathf.Atan2(diretion.y, diretion.x) * Mathf.Rad2Deg);
+    }
+    #endregion
+
+    public void ColourMove(HashSet<Node> list)
+    {
+        foreach (Node node in list)
+        {
+            ColourTile(node.Position, moveColor);
+        }
     }
 
     public void ColourTile(Vector3Int position, Color colour)

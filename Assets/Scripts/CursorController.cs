@@ -11,21 +11,23 @@ public class CursorController : MonoBehaviour
     [SerializeField] Tilemap cursorMap = null;
     [SerializeField] Tile cursorTile = null;
     Vector3Int previousMousePos = new Vector3Int();
-    public bool isSelected {get; set;}
+    bool showCursor;
 
     // Start is called before the first frame update
     void Start()
     {
         movePoint.parent = null;
-        isSelected = false;
+        showCursor = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector3Int mousePos = GetMousePosition();
-        MouseMove(mousePos);
-        MouseClick(mousePos);
+        if (showCursor)
+        {
+            MouseMove(mousePos);
+        }
     }
 
     #region Controller Option
@@ -51,18 +53,11 @@ public class CursorController : MonoBehaviour
     #region Mouse Option
     void MouseMove(Vector3Int mousePos)
     {
-        if (isSelected)
+        if (!mousePos.Equals(previousMousePos))
         {
-            
-        }
-        else
-        {
-            if (!mousePos.Equals(previousMousePos))
-            {
-                cursorMap.SetTile(previousMousePos, null);
-                cursorMap.SetTile(mousePos, cursorTile);
-                previousMousePos = mousePos;
-            }
+            cursorMap.SetTile(previousMousePos, null);
+            cursorMap.SetTile(mousePos, cursorTile);
+            previousMousePos = mousePos;
         }
     }
 
@@ -72,17 +67,16 @@ public class CursorController : MonoBehaviour
         return cursorMap.WorldToCell(mouseWorldPos);
     }
 
-    void MouseClick(Vector3Int mousePos)
+    public void ShowCursor(bool show)
     {
-        if (Input.GetMouseButtonDown(0))
+        if (show)
         {
-            isSelected = true;
-            cursorMap.SetTile(previousMousePos, null);
+            showCursor = true;
         }
-
-        if (Input.GetMouseButtonDown(1))
+        else
         {
-            isSelected = false;
+            showCursor = false;
+            cursorMap.SetTile(previousMousePos, null);
         }
     }
     #endregion

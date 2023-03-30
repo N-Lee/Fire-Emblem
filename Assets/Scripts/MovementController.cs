@@ -43,7 +43,8 @@ public class MovementController : MonoBehaviour
         tempUIList = new HashSet<Node>();
     }
 
-    public void Algorithm(int unitMaxMove)
+    #region Character Move
+    public HashSet<Node> GetMovementTiles(int unitMaxMove)
     {
         Initialize();
 
@@ -68,11 +69,6 @@ public class MovementController : MonoBehaviour
                 foreach (Node neighbour in neighbours)
                 {
                     int g = DetermineG(neighbour.Position, finalizedNode.Position);
-                    if (neighbour.Position == new Vector3Int(-2,1,0))
-                    {
-                        Debug.Log(finalizedNode.Position);
-                    Debug.Log(finalizedNode.G + "+" + g + " vs " + neighbour.G);
-                    }
                     if ((finalList.Contains(neighbour) || tempUIList.Contains(neighbour)) && finalizedNode.G + g < neighbour.G)
                     {                       
                         CalculateValues(finalizedNode, neighbour, g);
@@ -89,7 +85,8 @@ public class MovementController : MonoBehaviour
             finalList.UnionWith(UIList);
         }
 
-        AStarDebugger.myInstance.ColourMove(finalList);
+        MovementDraw.myInstance.ColourMove(finalList);
+        return finalList;
     }
 
     private List<Node> FindNeighbours(Vector3Int parentPosition)
@@ -103,7 +100,6 @@ public class MovementController : MonoBehaviour
                 if (x == 0 || y == 0)
                 {
                     Vector3Int neighbourPos = new Vector3Int(parentPosition.x - x, parentPosition.y - y, parentPosition.z);
-                    Debug.Log(neighbourPos);
                     TileBase neighbourTile = groundTilemap.GetTile(neighbourPos);
 
                     if (neighbourPos != startPos
@@ -155,7 +151,7 @@ public class MovementController : MonoBehaviour
         }
     }
 
-    private Node GetNode(Vector3Int position)
+    public Node GetNode(Vector3Int position)
     {
         if (allNodes.ContainsKey(position))
         {
@@ -187,5 +183,6 @@ public class MovementController : MonoBehaviour
 
         return null;
     }
+    #endregion
 
 }
