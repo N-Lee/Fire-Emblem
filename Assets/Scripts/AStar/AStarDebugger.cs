@@ -10,7 +10,6 @@ public class AStarDebugger : MonoBehaviour
     [SerializeField] Tile tile;
     [SerializeField] Color openColour, closedColour, pathColour, currentColour, startColour, goalColour;
     Color moveColor = new Color(0,0,255,130);
-    Color attackColor = new Color(255,0,0,130);
     [SerializeField] Canvas canvas;
     [SerializeField] GameObject debugTextPrefeb;
     List<GameObject> debugObjects = new List<GameObject>();

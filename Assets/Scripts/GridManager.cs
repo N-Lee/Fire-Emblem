@@ -81,7 +81,7 @@ public class GridManager : MonoBehaviour
             {
                 startPos = moveTilemap.WorldToCell(mousePos);
                 movementController.startPos = startPos;
-                movementNodes = movementController.GetMovementTiles(5);
+                movementNodes = movementController.GetTiles(5, 1, 1);
                 userPhase = UserPhase.CharacterMove;
                 cursorController.ShowCursor(false);
             }
@@ -117,6 +117,17 @@ public class GridManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            userPhase = UserPhase.Map;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (isArrowDrawn)
+            {
+                astar.Reset();
+                isArrowDrawn = false;
+            }
+            movementController.Reset();
             userPhase = UserPhase.Map;
         }
     }

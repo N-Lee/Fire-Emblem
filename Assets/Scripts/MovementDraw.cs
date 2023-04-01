@@ -10,8 +10,6 @@ public class MovementDraw : MonoBehaviour
     [SerializeField] Tile arrowTile;
     [SerializeField] Canvas canvas;
     [SerializeField] GameObject MovementPrefab;
-    Color moveColor = new Color32(0,0,255,130);
-    Color attackColor = new Color(255,0,0,130);
     static MovementDraw instance;
     List<GameObject> arrowObjects = new List<GameObject>();
     
@@ -28,11 +26,11 @@ public class MovementDraw : MonoBehaviour
         }
     }
 
-    public void ColourMove(HashSet<Node> list)
+    public void ColourMove(HashSet<Node> list, Color colour)
     {
         foreach (Node node in list)
         {
-            ColourTile(node.Position, moveColor);
+            ColourTile(node.Position, colour);
         }
     }
 
@@ -71,6 +69,11 @@ public class MovementDraw : MonoBehaviour
         }
 
         arrowObjects.Clear();
+    }
+
+    public void ResetMovement()
+    {
+        
     }
 
     #region A* Debug variables and functions

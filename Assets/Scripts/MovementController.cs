@@ -10,35 +10,53 @@ public class MovementController : MonoBehaviour
 {
     public Tilemap groundTilemap {get; set;}
     public Vector3Int startPos {get; set;}
-    HashSet<Node> UIList, tempUIList, finalList, attackList;
+    HashSet<Node> UIList, tempUIList, finalList, maxRangeList, attackList;
     Dictionary<Vector3Int, Node> allNodes = new Dictionary<Vector3Int, Node>();
     Node current;
     public Dictionary<TileBase, TileData> dataFromTiles {get; set;}
+
+    Color moveColor = new Color32(0,0,255,130);
+    Color attackColor = new Color32(255,0,0,130);
+    Color assistColor = new Color32(0,255,0,130);
+    Color defaultColor = new Color32(255,255,255,0);
 
     private void Initialize()
     {
         current = GetNode(startPos);
 
+        UIList = new HashSet<Node>();
+        tempUIList = new HashSet<Node>();
         finalList = new HashSet<Node>();
         finalList.Add(current);
-        UIList = new HashSet<Node>();
-        tempUIList = new HashSet<Node>();
+        maxRangeList = new HashSet<Node>();
+        attackList = new HashSet<Node>();
     }
 
-    public void ClearData()
+    public void Reset()
     {
         current = null;
-        finalList = new HashSet<Node>();
-        UIList = new HashSet<Node>();
-        tempUIList = new HashSet<Node>();
+
+        MovementDraw.myInstance.ColourMove(finalList, defaultColor);
+
+        finalList.Clear();
+        UIList.Clear();
+        tempUIList.Clear();
     }
 
     #region Character Move
-    public HashSet<Node> GetMovementTiles(int unitMaxMove)
+    public HashSet<Node> GetTiles(int unitMaxMove, int minAttackRange, int maxAttackRange)
     {
         Initialize();
+        FindMovementTiles(unitMaxMove);
 
+        MovementDraw.myInstance.ColourMove(finalList, moveColor);
+        return finalList;
+    }
+
+    private void FindMovementTiles(int unitMaxMove)
+    {
         List<Node> neighbours = FindNeighbours(current.Position);
+
         foreach (Node neighbour in neighbours)
         {
             int g = DetermineG(neighbour.Position, current.Position);
@@ -69,29 +87,25 @@ public class MovementController : MonoBehaviour
                         CalculateValues(finalizedNode, neighbour, g);
                         tempUIList.Add(neighbour);
                     }
+
+                    if (finalizedNode.G == unitMaxMove)
+                    {
+                        maxRangeList.Add(finalizedNode);
+                    }
                 }
             }
             
             UIList = tempUIList;
             finalList.UnionWith(UIList);
         }
+    }
 
-        /*
-        tempUIList.UnionWith(finalList);
-        finalList = new HashSet<Node>();
-
-        foreach(Node node in tempUIList)
+    public void FindAttackTiles()
+    {
+        foreach(Node node in maxRangeList)
         {
-            Collider2D targetObject = Physics2D.OverlapPoint(new Vector2 (node.Position.x, node.Position.y));
-            if (!(targetObject && targetObject.transform.gameObject.tag == "Player"))
-            {
-                finalList.Add(node);
-            }
+            
         }
-        */
-
-        MovementDraw.myInstance.ColourMove(finalList);
-        return finalList;
     }
 
     private List<Node> FindNeighbours(Vector3Int parentPosition)

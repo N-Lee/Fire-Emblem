@@ -7,7 +7,6 @@ public class CursorController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] Transform movePoint;
-    [SerializeField] LayerMask collisionLayer;
     [SerializeField] Tilemap cursorMap = null;
     [SerializeField] Tile cursorTile = null;
     Vector3Int previousMousePos = new Vector3Int();
@@ -64,7 +63,6 @@ public class CursorController : MonoBehaviour
     Vector3Int GetMousePosition()
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Debug.Log(mouseWorldPos);
         return cursorMap.WorldToCell(mouseWorldPos);
     }
 
