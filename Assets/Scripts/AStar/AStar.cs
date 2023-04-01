@@ -6,7 +6,6 @@ using UnityEngine.Tilemaps;
 
 public class AStar : Tile
 {
-    List<Tile> tiles;
     public Tilemap groundTilemap {get; set;}
     public Vector3Int startPos {get; set;}
     public Vector3Int goalPos {get; set;}
@@ -26,14 +25,13 @@ public class AStar : Tile
         closedList = new HashSet<Node>();
     }
 
-    public void Algorithm(Vector3Int start, Vector3Int goal, List<Tile> tiles)
+    public void Algorithm(Vector3Int start, Vector3Int goal)
     {
         if (current == null)
         {
             startPos = start;
             goalPos = goal;
             Initialize();
-            this.tiles = tiles;
         }
 
         while (openList.Count > 0 && path == null)
@@ -60,10 +58,12 @@ public class AStar : Tile
                 {
                     Vector3Int neighbourPos = new Vector3Int(parentPosition.x - x, parentPosition.y - y, parentPosition.z);
                     TileBase neighbourTile = groundTilemap.GetTile(neighbourPos);
+                    Collider2D targetObject = Physics2D.OverlapPoint(new Vector2 (neighbourPos.x+0.1f, neighbourPos.y+0.1f));
 
                     if (neighbourPos != startPos
                     && groundTilemap.GetTile(neighbourPos)
-                    && dataFromTiles[neighbourTile].isWalkable)
+                    && dataFromTiles[neighbourTile].isWalkable
+                    && !(targetObject && targetObject.transform.gameObject.tag == "Player"))
                     {
                         Node neighbour = GetNode(neighbourPos);
                         neighbours.Add(neighbour);
@@ -174,7 +174,8 @@ public class AStar : Tile
 
         foreach (Vector3Int position in path.Keys)
         {
-            groundTilemap.SetTile(position, tiles[0]);
+            Tile originalTile = groundTilemap.GetTile<Tile>(position);
+            groundTilemap.SetTile(position, originalTile);
         }
 
         allNodes.Clear();

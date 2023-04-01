@@ -64,6 +64,7 @@ public class CursorController : MonoBehaviour
     Vector3Int GetMousePosition()
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Debug.Log(mouseWorldPos);
         return cursorMap.WorldToCell(mouseWorldPos);
     }
 

@@ -11,7 +11,6 @@ public class GridManager : MonoBehaviour
     [SerializeField] CursorController cursorController;
     [SerializeField] Tilemap groundTilemap, moveTilemap;
     [SerializeField] List<TileData> tileDatas;
-    [SerializeField] List<Tile> tiles;
     Dictionary<TileBase, TileData> dataFromTiles;
     HashSet<Node> movementNodes = new HashSet<Node>();
     AStar astar;
@@ -111,7 +110,7 @@ public class GridManager : MonoBehaviour
             goalPos = gridPosition;
 
             TileBase hoveredTile = groundTilemap.GetTile(gridPosition);
-            astar.Algorithm(startPos, goalPos, tiles);
+            astar.Algorithm(startPos, goalPos);
             isArrowDrawn = true;
         }
 
@@ -126,7 +125,7 @@ public class GridManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-           astar.Algorithm(startPos, goalPos, tiles);
+           astar.Algorithm(startPos, goalPos);
         }
     }
 }

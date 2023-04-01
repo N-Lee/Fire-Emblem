@@ -8,19 +8,9 @@ enum MoveOptions {Attack, Move, Remove};
 
 public class MovementController : MonoBehaviour
 {
-    [SerializeField] Grid grid;    
-    [SerializeField] Tile arrowTile;
-    Color moveColour = new Color(0,0,255,130);
-    Color attackColour = new Color (255,0,0,130);
-    [SerializeField] Canvas canvas;
-    [SerializeField] GameObject debugTextPrefeb;
-    [SerializeField] Tilemap moveTilemap; 
-
     public Tilemap groundTilemap {get; set;}
     public Vector3Int startPos {get; set;}
-    public Vector3Int goalPos {get; set;}
-    HashSet<Node> openList, closedList, UIList, tempUIList, finalList;
-    Stack<Vector3Int> path;
+    HashSet<Node> UIList, tempUIList, finalList, attackList;
     Dictionary<Vector3Int, Node> allNodes = new Dictionary<Vector3Int, Node>();
     Node current;
     public Dictionary<TileBase, TileData> dataFromTiles {get; set;}
@@ -81,9 +71,24 @@ public class MovementController : MonoBehaviour
                     }
                 }
             }
+            
             UIList = tempUIList;
             finalList.UnionWith(UIList);
         }
+
+        /*
+        tempUIList.UnionWith(finalList);
+        finalList = new HashSet<Node>();
+
+        foreach(Node node in tempUIList)
+        {
+            Collider2D targetObject = Physics2D.OverlapPoint(new Vector2 (node.Position.x, node.Position.y));
+            if (!(targetObject && targetObject.transform.gameObject.tag == "Player"))
+            {
+                finalList.Add(node);
+            }
+        }
+        */
 
         MovementDraw.myInstance.ColourMove(finalList);
         return finalList;
@@ -101,10 +106,12 @@ public class MovementController : MonoBehaviour
                 {
                     Vector3Int neighbourPos = new Vector3Int(parentPosition.x - x, parentPosition.y - y, parentPosition.z);
                     TileBase neighbourTile = groundTilemap.GetTile(neighbourPos);
+                    Collider2D targetObject = Physics2D.OverlapPoint(new Vector2 (neighbourPos.x+0.1f, neighbourPos.y+0.1f));
 
                     if (neighbourPos != startPos
                     && groundTilemap.GetTile(neighbourPos)
-                    && dataFromTiles[neighbourTile].isWalkable)
+                    && dataFromTiles[neighbourTile].isWalkable
+                    && !(targetObject && targetObject.transform.gameObject.tag == "Player"))
                     {
                         Node neighbour = GetNode(neighbourPos);
                         neighbours.Add(neighbour);
@@ -140,17 +147,6 @@ public class MovementController : MonoBehaviour
         return g;
     }
 
-    private void UpdateCurrentTile(ref Node current)
-    {
-        openList.Remove(current);
-        closedList.Add(current);
-
-        if (openList.Count > 0)
-        {
-            current = openList.OrderBy(x => x.F).First();
-        }
-    }
-
     public Node GetNode(Vector3Int position)
     {
         if (allNodes.ContainsKey(position))
@@ -163,25 +159,6 @@ public class MovementController : MonoBehaviour
             allNodes.Add(position, node);
             return node;
         }
-    }
-
-    Stack<Vector3Int> GeneratePath(Node current)
-    {
-        if (current.Position == goalPos)
-        {
-            Stack<Vector3Int> finalPath = new Stack<Vector3Int>();
-
-            while (current.Position != startPos)
-            {
-                finalPath.Push(current.Position);
-
-                current = current.Parent;
-            }
-
-            return finalPath;
-        }
-
-        return null;
     }
     #endregion
 
