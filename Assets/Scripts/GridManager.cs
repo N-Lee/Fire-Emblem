@@ -36,7 +36,7 @@ public class GridManager : MonoBehaviour
         astar.groundTilemap = groundTilemap;
         astar.dataFromTiles = dataFromTiles;
 
-        movementController = new MovementController();
+        movementController = gameObject.AddComponent<MovementController>();
         movementController.groundTilemap = groundTilemap;
         movementController.dataFromTiles = dataFromTiles;
     }
@@ -81,7 +81,7 @@ public class GridManager : MonoBehaviour
             {
                 startPos = moveTilemap.WorldToCell(mousePos);
                 movementController.startPos = startPos;
-                movementNodes = movementController.GetTiles(5, 1, 1);
+                movementNodes = movementController.GetTiles(0, 4, 5);
                 userPhase = UserPhase.CharacterMove;
                 cursorController.ShowCursor(false);
             }
