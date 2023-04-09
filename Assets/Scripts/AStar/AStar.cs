@@ -11,7 +11,7 @@ public class AStar : Tile
     public Vector3Int goalPos {get; set;}
     HashSet<Node> openList, closedList;
     HashSet<Vector3Int> changedTiles = new HashSet<Vector3Int>();
-    Dictionary<Vector3Int, Node> path;
+    List<Node> path;
     Dictionary<Vector3Int, Node> allNodes = new Dictionary<Vector3Int, Node>();
     Node current;
     public Dictionary<TileBase, TileData> dataFromTiles {get; set;}
@@ -25,7 +25,7 @@ public class AStar : Tile
         closedList = new HashSet<Node>();
     }
 
-    public void Algorithm(Vector3Int start, Vector3Int goal)
+    public List<Node> Algorithm(Vector3Int start, Vector3Int goal)
     {
         if (current == null)
         {
@@ -44,6 +44,7 @@ public class AStar : Tile
         }
 
         MovementDraw.myInstance.DrawArrows(path);
+        return path;
     }
 
     private List<Node> FindNeighbours(Vector3Int parentPosition)
@@ -150,15 +151,15 @@ public class AStar : Tile
         }
     }
 
-    Dictionary<Vector3Int, Node> GeneratePath(Node current)
+    List<Node> GeneratePath(Node current)
     {
         if (current.Position == goalPos)
         {
-            Dictionary<Vector3Int, Node> finalPath = new Dictionary<Vector3Int, Node>();
+            List<Node> finalPath = new List<Node>();
 
             while (current.Position != startPos)
             {
-                finalPath.Add(current.Position, current);
+                finalPath.Add(current);
                 current = current.Parent;
             }
 
@@ -172,8 +173,9 @@ public class AStar : Tile
     {
         MovementDraw.myInstance.ResetAStar();
 
-        foreach (Vector3Int position in path.Keys)
+        foreach (Node node in path)
         {
+            Vector3Int position = node.Position;
             Tile originalTile = groundTilemap.GetTile<Tile>(position);
             groundTilemap.SetTile(position, originalTile);
         }

@@ -8,9 +8,36 @@ public class Unit : MonoBehaviour
     public UnitClass unitClass;
     public bool isBoss;
     IDictionary<string, int> weapons;
+    Vector3 characterPosition;
+    Vector3 characterOffset = new Vector3(0.502f,0.062f,0f);
+    public bool isCharacterMoving, isDown, isLeft, isRight, isUp;
+    int pathCount;
+    List<Node> path;
+    Animator animator;
+    SpriteRenderer spriteRenderer;
 
     // NOTES: Weapon EXP: Get 2 per attack (4 if the attacks twice in one turn). Start at 1 (E). 31 is D. 71 is C (+40). 121 is B. 181 is A. 251 is S 
     // Weapon rank bonus https://fireemblem.fandom.com/wiki/Weapon_Level
+
+    protected virtual void Start()
+    {
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        isCharacterMoving = isDown = isLeft = isRight = isUp = false;
+    }
+
+    protected virtual void Update()
+    {
+        animator.SetBool("isDown", isDown);
+        animator.SetBool("isLeft", isLeft);
+        animator.SetBool("isRight", isRight);
+        animator.SetBool("isUp", isUp);
+
+        if (isCharacterMoving)
+        {
+            Move();
+        }
+    }
 
     public void SetClass(UnitClass newClass)
     {
@@ -111,5 +138,55 @@ public class Unit : MonoBehaviour
         }
 
         return xp * assassinateBonus;
+    }
+
+    void Move()
+    {
+        Vector3 pathWithOffset = path[pathCount].Position + characterOffset;
+        characterPosition = transform.position;
+
+        if (characterPosition.x - pathWithOffset.x > 0)
+        {
+            spriteRenderer.flipX = true;
+            isLeft = true;
+            isDown = isRight = isUp = false;
+        }
+        if (characterPosition.x - pathWithOffset.x < 0)
+        {
+            isRight = true;
+            isDown = isLeft = isUp = false;
+        }
+        if (characterPosition.y - pathWithOffset.y > 0)
+        {
+            isDown = true;
+            isLeft = isRight = isUp = false;
+        }
+        if (characterPosition.y - pathWithOffset.y < 0)
+        {
+            isUp = true;
+            isDown = isLeft = isRight = false;
+        }
+
+        transform.position = Vector3.MoveTowards(characterPosition, pathWithOffset, 1f * Time.deltaTime);
+
+        if (characterPosition == pathWithOffset && pathCount >= 0)
+        {
+            --pathCount;
+        }
+
+        if (pathCount < 0)
+        {
+            animator.Play("Idle", 0, AnimationSync.myInstance.GetAnimationFrame());
+            spriteRenderer.flipX = false;
+            isCharacterMoving = false;
+            isDown = isLeft = isRight = isUp = false;
+        }
+    }
+
+    public void SetPath(List<Node> path)
+    {
+        this.path = path;
+        pathCount = path.Count - 1;
+        isCharacterMoving = true;
     }
 }

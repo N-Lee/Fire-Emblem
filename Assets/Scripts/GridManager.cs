@@ -12,7 +12,10 @@ public class GridManager : MonoBehaviour
     [SerializeField] Tilemap groundTilemap, moveTilemap;
     [SerializeField] List<TileData> tileDatas;
     Dictionary<TileBase, TileData> dataFromTiles;
+    Unit selectedCharacter;
     HashSet<Node> movementNodes = new HashSet<Node>();
+    HashSet<Node> attackNodes = new HashSet<Node>();
+    List<Node> path = new List<Node>();
     AStar astar;
     MovementController movementController;
     Vector3Int startPos, goalPos;
@@ -81,7 +84,10 @@ public class GridManager : MonoBehaviour
             {
                 startPos = moveTilemap.WorldToCell(mousePos);
                 movementController.startPos = startPos;
-                movementNodes = movementController.GetTiles(0, 4, 5);
+                movementNodes = movementController.GetMovementTiles(4);
+                attackNodes = movementController.GetAttackTiles(1,1);
+
+                selectedCharacter = targetObject.transform.gameObject.GetComponent<Unit>();
                 userPhase = UserPhase.CharacterMove;
                 cursorController.ShowCursor(false);
             }
@@ -101,35 +107,52 @@ public class GridManager : MonoBehaviour
 
         if (gridPosition != goalPos && movementNodes.Contains(currentNode) && startPos != gridPosition)
         {
-            if (isArrowDrawn)
-            {
-                astar.Reset();
-                isArrowDrawn = false;
-            }
+            RemoveArrow();
 
             goalPos = gridPosition;
 
             TileBase hoveredTile = groundTilemap.GetTile(gridPosition);
-            astar.Algorithm(startPos, goalPos);
+            path = astar.Algorithm(startPos, goalPos);
             isArrowDrawn = true;
         }
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && movementNodes.Contains(currentNode))
         {
+            RemoveMovementUI();
+            selectedCharacter.SetPath(path);
             userPhase = UserPhase.Map;
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            if (isArrowDrawn)
-            {
-                astar.Reset();
-                isArrowDrawn = false;
-            }
+            RemoveMovementUI();
             movementController.Reset();
             userPhase = UserPhase.Map;
         }
+    }
+
+    void DeselectCharacter()
+    {
+        selectedCharacter = null;
+        movementNodes.Clear();
+        attackNodes.Clear();
+        path.Clear();
+    }
+
+    void RemoveArrow()
+    {
+        if (isArrowDrawn)
+        {
+            astar.Reset();
+            isArrowDrawn = false;
+        }
+    }
+
+    void RemoveMovementUI()
+    {
+        RemoveArrow();
+        movementController.Reset();
     }
 
     void DebugAStar()

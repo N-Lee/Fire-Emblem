@@ -41,16 +41,16 @@ public class MovementDraw : MonoBehaviour
         moveTilemap.SetColor(position, colour);
     }
 
-    public void DrawArrows(Dictionary<Vector3Int, Node> path)
+    public void DrawArrows(List<Node> path)
     {
-        foreach (KeyValuePair<Vector3Int,Node> node in path)
+        foreach (Node node in path)
         {
-            if (node.Value.Parent != null)
+            if (node.Parent != null)
             {
                 GameObject go = Instantiate(MovementPrefab, canvas.transform);
-                go.transform.position = grid.CellToWorld(node.Key);
+                go.transform.position = grid.CellToWorld(node.Position);
                 arrowObjects.Add(go);
-                GenerateArrow(node.Value, go.GetComponent<MovementArrow>());
+                GenerateArrow(node, go.GetComponent<MovementArrow>());
             }
         }
     }

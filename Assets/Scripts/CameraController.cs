@@ -16,13 +16,13 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        cam = gameObject.GetComponent<Camera>();
+        cam = GetComponent<Camera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        EdgePan();
+        //EdgePan();
     }
 
     void EdgePan()

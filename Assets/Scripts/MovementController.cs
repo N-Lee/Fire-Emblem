@@ -46,15 +46,22 @@ public class MovementController : MonoBehaviour
 
     #region Character Move and Attack
     // Finds and colours tiles for movement and attack
-    public HashSet<Node> GetTiles(int unitMaxMove, int minAttackRange, int maxAttackRange)
+    public HashSet<Node> GetMovementTiles(int unitMaxMove)
     {
         Initialize();
         FindMovementTiles(unitMaxMove);
-        FindAttackTiles(minAttackRange, maxAttackRange);
 
         MovementDraw.myInstance.ColourMove(movementList, moveColor);
-        MovementDraw.myInstance.ColourMove(attackList, attackColor);
         return movementList;
+    }
+
+    public HashSet<Node> GetAttackTiles(int minAttackRange, int maxAttackRange)
+    {
+        FindAttackTiles(minAttackRange, maxAttackRange);
+        attackList.ExceptWith(movementList);
+
+        MovementDraw.myInstance.ColourMove(attackList, attackColor);
+        return attackList;
     }
 
     // Finds the tiles the character can move to
