@@ -6,7 +6,7 @@ public class Lyn : Unit
 {
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         level = 1;
         exp = 0;

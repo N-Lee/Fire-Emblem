@@ -178,6 +178,10 @@ public class AStar : Tile
             Vector3Int position = node.Position;
             Tile originalTile = groundTilemap.GetTile<Tile>(position);
             groundTilemap.SetTile(position, originalTile);
+            node.G = 0;
+            node.F = 0;
+            node.H = 0;
+            node.Parent = null;
         }
 
         allNodes.Clear();

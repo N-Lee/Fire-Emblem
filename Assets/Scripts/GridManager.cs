@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-enum UserPhase {Map, CharacterMove, CharacterAction, ActionTarget, Battle};
+enum UserPhase {Map, CharacterMove, CharacterAction, Action, Battle};
 
 public class GridManager : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] CursorController cursorController;
     [SerializeField] Tilemap groundTilemap, moveTilemap;
     [SerializeField] List<TileData> tileDatas;
+    [SerializeField] GameObject actionMenuObj;
     Dictionary<TileBase, TileData> dataFromTiles;
     Unit selectedCharacter;
     HashSet<Node> movementNodes = new HashSet<Node>();
@@ -20,6 +21,7 @@ public class GridManager : MonoBehaviour
     MovementController movementController;
     Vector3Int startPos, goalPos;
     bool isArrowDrawn = false;
+    bool isMoving = false;
 
     // Start is called before the first frame update
     void Start()
@@ -47,17 +49,8 @@ public class GridManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseClick();
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-        }
-    }
-
-    void MouseClick()
-    {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
+        
         switch (userPhase)
         {
             case UserPhase.Map:
@@ -68,10 +61,10 @@ public class GridManager : MonoBehaviour
                 CharacterMovePhase(mousePos);
                 break;
 
-            default:
+            case UserPhase.Action:
+                ActionPhase();
                 break;
         }
-
     }
 
     void MapPhase(Vector3 mousePos)
@@ -84,7 +77,7 @@ public class GridManager : MonoBehaviour
             {
                 startPos = moveTilemap.WorldToCell(mousePos);
                 movementController.startPos = startPos;
-                movementNodes = movementController.GetMovementTiles(4);
+                movementNodes = movementController.GetMovementTiles(10);
                 attackNodes = movementController.GetAttackTiles(1,1);
 
                 selectedCharacter = targetObject.transform.gameObject.GetComponent<Unit>();
@@ -102,36 +95,48 @@ public class GridManager : MonoBehaviour
 
     void CharacterMovePhase(Vector3 mousePos)
     {
-        Vector3Int gridPosition = groundTilemap.WorldToCell(mousePos);
-        Node currentNode = movementController.GetNode(gridPosition);
-
-        if (gridPosition != goalPos && movementNodes.Contains(currentNode) && startPos != gridPosition)
+        if (!isMoving)
         {
-            RemoveArrow();
+            Vector3Int gridPosition = groundTilemap.WorldToCell(mousePos);
+            Node currentNode = movementController.GetNode(gridPosition);
 
-            goalPos = gridPosition;
+            if (gridPosition != goalPos && movementNodes.Contains(currentNode) && startPos != gridPosition)
+            {
+                RemoveArrow();
 
-            TileBase hoveredTile = groundTilemap.GetTile(gridPosition);
-            path = astar.Algorithm(startPos, goalPos);
-            isArrowDrawn = true;
+                goalPos = gridPosition;
+
+                TileBase hoveredTile = groundTilemap.GetTile(gridPosition);
+                path = astar.Algorithm(startPos, goalPos);
+                isArrowDrawn = true;
+            }
+
+
+            if (Input.GetMouseButtonDown(0) && movementNodes.Contains(currentNode))
+            {
+                selectedCharacter.SetPath(path);
+                RemoveMovementUI();
+                isMoving = true;
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                RemoveMovementUI();
+                userPhase = UserPhase.Map;
+            }
         }
 
-
-        if (Input.GetMouseButtonDown(0) && movementNodes.Contains(currentNode))
+        if (isMoving && !selectedCharacter.isCharacterMoving)
         {
-            RemoveMovementUI();
-            selectedCharacter.SetPath(path);
-            userPhase = UserPhase.Map;
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            RemoveMovementUI();
-            movementController.Reset();
-            userPhase = UserPhase.Map;
+            userPhase = UserPhase.Action;
         }
     }
-
+    
+    void ActionPhase()
+    {
+        actionMenuObj.SetActive(true);
+        actionMenuObj.GetComponent<ActionMenu>().MoveMenu(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
+    }
     void DeselectCharacter()
     {
         selectedCharacter = null;

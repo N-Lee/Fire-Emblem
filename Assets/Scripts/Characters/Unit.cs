@@ -8,9 +8,11 @@ public class Unit : MonoBehaviour
     public UnitClass unitClass;
     public bool isBoss;
     IDictionary<string, int> weapons;
+    float moveSpeed = 5f;
     Vector3 characterPosition;
     Vector3 characterOffset = new Vector3(0.502f,0.062f,0f);
-    public bool isCharacterMoving, isDown, isLeft, isRight, isUp;
+    bool isDown, isLeft, isRight, isUp;
+    public bool isCharacterMoving;
     int pathCount;
     List<Node> path;
     Animator animator;
@@ -167,7 +169,7 @@ public class Unit : MonoBehaviour
             isDown = isLeft = isRight = false;
         }
 
-        transform.position = Vector3.MoveTowards(characterPosition, pathWithOffset, 1f * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(characterPosition, pathWithOffset, moveSpeed * Time.deltaTime);
 
         if (characterPosition == pathWithOffset && pathCount >= 0)
         {

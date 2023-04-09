@@ -34,10 +34,19 @@ public class MovementController : MonoBehaviour
     // Reset variables and remove colours in tiles
     public void Reset()
     {
+
         current = null;
 
         MovementDraw.myInstance.ColourMove(movementList, defaultColor);
         MovementDraw.myInstance.ColourMove(attackList, defaultColor);
+
+        foreach(Node node in movementList)
+        {
+            node.G = 0;
+            node.F = 0;
+            node.H = 0;
+            node.Parent = null;
+        }
 
         movementList.Clear();
         maxRangeList.Clear();
