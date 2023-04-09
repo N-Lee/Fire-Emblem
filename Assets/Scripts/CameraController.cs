@@ -6,10 +6,6 @@ using UnityEngine.Tilemaps;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] Tilemap groundTileMap;
-    [SerializeField] Transform northDetect;
-    [SerializeField] Transform eastDetect;
-    [SerializeField] Transform southDetect;
-    [SerializeField] Transform westDetect;
     Camera cam;
     float moveSpeed = 10f;
     float edgeOffset = 30f;
@@ -27,10 +23,15 @@ public class CameraController : MonoBehaviour
 
     void EdgePan()
     {   
-        Vector3Int northDetectInt = new Vector3Int(Mathf.FloorToInt(northDetect.position.x), Mathf.FloorToInt(northDetect.position.y), 0);
-        Vector3Int eastDetectInt = new Vector3Int(Mathf.FloorToInt(eastDetect.position.x), Mathf.FloorToInt(eastDetect.position.y), 0);
-        Vector3Int southDetectInt = new Vector3Int(Mathf.FloorToInt(southDetect.position.x), Mathf.FloorToInt(southDetect.position.y), 0);
-        Vector3Int westDetectInt = new Vector3Int(Mathf.FloorToInt(westDetect.position.x), Mathf.FloorToInt(westDetect.position.y), 0);
+        Vector3 north = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width/2, Screen.height, 0));
+        Vector3 east = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height/2, 0));
+        Vector3 south = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width/2, 0, 0));
+        Vector3 west = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height/2, 0));
+        
+        Vector3Int northDetectInt = new Vector3Int(Mathf.FloorToInt(north.x), Mathf.FloorToInt(north.y), 0);
+        Vector3Int eastDetectInt = new Vector3Int(Mathf.FloorToInt(east.x), Mathf.FloorToInt(east.y), 0);
+        Vector3Int southDetectInt = new Vector3Int(Mathf.FloorToInt(south.x), Mathf.FloorToInt(south.y-1), 0);
+        Vector3Int westDetectInt = new Vector3Int(Mathf.FloorToInt(west.x-1), Mathf.FloorToInt(west.y), 0);
 
         if (Input.mousePosition.x > Screen.width - edgeOffset &&
         groundTileMap.GetTile<Tile>(eastDetectInt) != null)
