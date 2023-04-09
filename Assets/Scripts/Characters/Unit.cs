@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour
     float moveSpeed = 5f;
     Vector3 characterPosition;
     Vector3 characterOffset = new Vector3(0.502f,0.062f,0f);
-    bool isDown, isLeft, isRight, isUp;
+    public bool isDown, isLeft, isRight, isUp;
     public bool isCharacterMoving;
     int pathCount;
     List<Node> path;
