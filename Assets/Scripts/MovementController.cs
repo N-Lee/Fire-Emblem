@@ -53,8 +53,8 @@ public class MovementController : MonoBehaviour
         attackList.Clear();
     }
 
-    #region Character Move and Attack
-    // Finds and colours tiles for movement and attack
+    #region Character Move
+    // Finds and colours tiles for movement
     public HashSet<Node> GetMovementTiles(int unitMaxMove)
     {
         Initialize();
@@ -62,15 +62,6 @@ public class MovementController : MonoBehaviour
 
         MovementDraw.myInstance.ColourMove(movementList, moveColor);
         return movementList;
-    }
-
-    public HashSet<Node> GetAttackTiles(int minAttackRange, int maxAttackRange)
-    {
-        FindAttackTiles(minAttackRange, maxAttackRange);
-        attackList.ExceptWith(movementList);
-
-        MovementDraw.myInstance.ColourMove(attackList, attackColor);
-        return attackList;
     }
 
     // Finds the tiles the character can move to
@@ -170,13 +161,36 @@ public class MovementController : MonoBehaviour
 
         return neighbours;
     }
+    #endregion
 
-    // After finding the movement of a player, finds the tiles that the user can attack on
-    public void FindAttackTiles(int minAttackRange, int maxAttackRange)
+    #region Character Attack Range 
+    // Finds and colours tiles for attacking 
+    public HashSet<Node> GetAttackTilesDuringMove(int minAttackRange, int maxAttackRange)
     {
-        foreach(Node node in movementList)
+        FindAttackTiles(minAttackRange, maxAttackRange, movementList);
+        attackList.ExceptWith(movementList);
+
+        MovementDraw.myInstance.ColourMove(attackList, attackColor);
+        return attackList;
+    }
+
+    public HashSet<Node> GetAttackTilesDuringAttack(int minAttackRange, int maxAttackRange, Vector3Int attackPos)
+    {
+        HashSet<Node> attackPosList = new HashSet<Node>();
+        Node attackNode = GetNode(attackPos);
+        attackPosList.Add(attackNode);
+        FindAttackTiles(minAttackRange, maxAttackRange, attackPosList);
+
+        attackList.ExceptWith(attackPosList);
+        MovementDraw.myInstance.ColourMove(attackList, attackColor);
+        return attackList;
+    }
+
+    // Finds the tiles that the user can attack on
+    public void FindAttackTiles(int minAttackRange, int maxAttackRange, HashSet<Node> moveList)
+    {
+        foreach(Node node in moveList)
         {
-            
             HashSet<Node> UIList;
             UIList = new HashSet<Node>();
             UIList.Add(node);
@@ -240,7 +254,9 @@ public class MovementController : MonoBehaviour
 
         return neighbours;
     }
+    #endregion
 
+    #region Others
     // Calculates the movement cost from start tile. Reused G from AStar to represent movement cost
     private void CalculateValues(Node parent, Node neighbour, int cost)
     {

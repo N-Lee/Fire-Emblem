@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ActionMenu : MonoBehaviour
 {
     [SerializeField] Button attack, staff, rescue, item, trade, wait;
+    [SerializeField] GridManager gridManager;
+    public bool phaseEnd;
     RectTransform rectTransform;
     Vector3 menuOffset = new Vector3(30, -200, 0);
     float leftXOffset = 40f;

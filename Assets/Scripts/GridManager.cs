@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-enum UserPhase {Map, CharacterMove, CharacterAction, Action, Battle};
+enum UserPhase {Map, CharacterMove, Menu, Action, Battle};
 public enum ActionMenuOptions{Attack, Staff, Rescue, Item, Trade, Wait};
 
 public class GridManager : MonoBehaviour
@@ -14,6 +14,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] Tilemap groundTilemap, moveTilemap;
     [SerializeField] List<TileData> tileDatas;
     [SerializeField] GameObject actionMenuObj;
+    ActionMenu actionMenu;
     Dictionary<TileBase, TileData> dataFromTiles;
     Unit selectedCharacter;
     HashSet<Node> movementNodes = new HashSet<Node>();
@@ -46,6 +47,8 @@ public class GridManager : MonoBehaviour
         movementController = gameObject.AddComponent<MovementController>();
         movementController.groundTilemap = groundTilemap;
         movementController.dataFromTiles = dataFromTiles;
+
+        actionMenu = actionMenuObj.GetComponent<ActionMenu>();
     }
 
     // Update is called once per frame
@@ -63,8 +66,12 @@ public class GridManager : MonoBehaviour
                 CharacterMovePhase(mousePos);
                 break;
 
+            case UserPhase.Menu:
+                MenuPhase();
+                break;
+
             case UserPhase.Action:
-                ActionPhase();
+                ActionPhase(mousePos);
                 break;
         }
     }
@@ -80,7 +87,7 @@ public class GridManager : MonoBehaviour
                 startPos = moveTilemap.WorldToCell(mousePos);
                 movementController.startPos = startPos;
                 movementNodes = movementController.GetMovementTiles(10);
-                attackNodes = movementController.GetAttackTiles(1,1);
+                attackNodes = movementController.GetAttackTilesDuringMove(1,1);
 
                 selectedCharacter = targetObject.transform.gameObject.GetComponent<Unit>();
                 userPhase = UserPhase.CharacterMove;
@@ -97,6 +104,8 @@ public class GridManager : MonoBehaviour
 
     void CharacterMovePhase(Vector3 mousePos)
     {
+        Collider2D targetObject = Physics2D.OverlapPoint(mousePos);
+
         if (!isMoving)
         {
             Vector3Int gridPosition = groundTilemap.WorldToCell(mousePos);
@@ -119,10 +128,12 @@ public class GridManager : MonoBehaviour
                 selectedCharacter.SetPath(path);
                 RemoveMovementUI();
                 isMoving = true;
+                isAttack = true;
             }
 
             if (Input.GetMouseButtonDown(1))
             {
+                DeselectCharacter();
                 RemoveMovementUI();
                 userPhase = UserPhase.Map;
             }
@@ -130,18 +141,37 @@ public class GridManager : MonoBehaviour
 
         if (isMoving && !selectedCharacter.isCharacterMoving)
         {
-            userPhase = UserPhase.Action;
+            userPhase = UserPhase.Menu;
         }
     }
     
-    void ActionPhase()
+    void MenuPhase()
     {
-        ActionMenu actionMenu = actionMenuObj.GetComponent<ActionMenu>();
         //actionMenuObj.SetActive(true);
-        actionMenu.Show(new List<string> {"Attack", "Wait"});
+        actionMenu.Show(new List<string> {"Attack"});
         actionMenu.MoveMenu(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
-        
     }
+
+    void ActionPhase(Vector3 mousePos)
+    {
+        Collider2D targetObject = Physics2D.OverlapPoint(mousePos);
+
+        switch(actionMenuOptions)
+        {
+            case ActionMenuOptions.Attack:
+                if (Input.GetMouseButtonDown(0) && targetObject && targetObject.transform.gameObject.tag == "Player")
+                {
+                    Debug.Log("Attack Unit");
+                }
+                else if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
+                    RemoveMovementUI();
+                    userPhase = UserPhase.CharacterMove;
+                }
+                break;
+        }
+    }
+
     void DeselectCharacter()
     {
         selectedCharacter = null;
@@ -163,6 +193,14 @@ public class GridManager : MonoBehaviour
     {
         RemoveArrow();
         movementController.Reset();
+    }
+
+    public void AttackButton()
+    {
+        movementController.GetAttackTilesDuringAttack(1,1,moveTilemap.WorldToCell(selectedCharacter.gameObject.transform.position));
+        actionMenu.Hide();
+        actionMenuOptions = ActionMenuOptions.Attack;
+        userPhase = UserPhase.Action;
     }
 
     void DebugAStar()
