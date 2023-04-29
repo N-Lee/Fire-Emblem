@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ActionMenu : MonoBehaviour
 {
-    Button attack, item, trade, wait;
+    [SerializeField] Button attack, staff, rescue, item, trade, wait;
     RectTransform rectTransform;
     Vector3 menuOffset = new Vector3(30, -200, 0);
     float leftXOffset = 40f;
@@ -34,6 +34,56 @@ public class ActionMenu : MonoBehaviour
             rectTransform.anchorMin = new Vector2(0,1);
             rectTransform.pivot = new Vector2(0,1);
             rectTransform.anchoredPosition = menuOffset;
+        }
+    }
+
+    public void Show(List<string> options)
+    {
+        gameObject.SetActive(true);
+        SelectOptions(options);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+        attack.gameObject.SetActive(false);
+        staff.gameObject.SetActive(false);
+        rescue.gameObject.SetActive(false);
+        item.gameObject.SetActive(false);
+        trade.gameObject.SetActive(false);
+        wait.gameObject.SetActive(false);
+    }
+
+    void SelectOptions(List<string> options)
+    {
+        foreach (string s in options)
+        {
+            switch(s)
+            {
+                case "Attack":
+                    attack.gameObject.SetActive(true);
+                    break;
+                
+                case "Staff":
+                    staff.gameObject.SetActive(true);
+                    break;
+                
+                case "Rescue":
+                    rescue.gameObject.SetActive(true);
+                    break;
+
+                case "Item":
+                    item.gameObject.SetActive(true);
+                    break;
+
+                case "Trade":
+                    trade.gameObject.SetActive(true);
+                    break;
+                
+                case "Wait":
+                    wait.gameObject.SetActive(true);
+                    break;
+            }
         }
     }
 }

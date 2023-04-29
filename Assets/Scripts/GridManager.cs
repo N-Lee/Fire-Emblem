@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 enum UserPhase {Map, CharacterMove, CharacterAction, Action, Battle};
+public enum ActionMenuOptions{Attack, Staff, Rescue, Item, Trade, Wait};
 
 public class GridManager : MonoBehaviour
 {
-    UserPhase userPhase;
+    [SerializeField] UserPhase userPhase;
+    ActionMenuOptions actionMenuOptions;
     [SerializeField] CursorController cursorController;
     [SerializeField] Tilemap groundTilemap, moveTilemap;
     [SerializeField] List<TileData> tileDatas;
@@ -134,8 +136,11 @@ public class GridManager : MonoBehaviour
     
     void ActionPhase()
     {
-        actionMenuObj.SetActive(true);
-        actionMenuObj.GetComponent<ActionMenu>().MoveMenu(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
+        ActionMenu actionMenu = actionMenuObj.GetComponent<ActionMenu>();
+        //actionMenuObj.SetActive(true);
+        actionMenu.Show(new List<string> {"Attack", "Wait"});
+        actionMenu.MoveMenu(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
+        
     }
     void DeselectCharacter()
     {
