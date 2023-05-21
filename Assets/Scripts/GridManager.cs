@@ -125,10 +125,14 @@ public class GridManager : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) && movementNodes.Contains(currentNode))
             {
+                if (goalPos == startPos)
+                {
+                    userPhase = UserPhase.Menu;
+                    return;
+                }
                 selectedCharacter.SetPath(path);
                 RemoveMovementUI();
                 isMoving = true;
-                isAttack = true;
             }
 
             if (Input.GetMouseButtonDown(1))
