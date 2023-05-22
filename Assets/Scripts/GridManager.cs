@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// TODO: Finish Brigand mapping
+
 enum UserPhase {Map, CharacterMove, Menu, Action, Battle};
 public enum ActionMenuOptions{Attack, Staff, Rescue, Item, Trade, Wait};
 
@@ -151,7 +153,6 @@ public class GridManager : MonoBehaviour
     
     void MenuPhase()
     {
-        //actionMenuObj.SetActive(true);
         actionMenu.Show(new List<string> {"Attack"});
         actionMenu.MoveMenu(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
     }
@@ -172,6 +173,18 @@ public class GridManager : MonoBehaviour
                     RemoveMovementUI();
                     userPhase = UserPhase.CharacterMove;
                 }
+                break;
+
+            case ActionMenuOptions.Staff:
+                break;
+
+            case ActionMenuOptions.Rescue:
+                break;
+
+            case ActionMenuOptions.Item:
+                break;
+
+            case ActionMenuOptions.Wait:
                 break;
         }
     }

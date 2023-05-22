@@ -2,29 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lyn : Unit 
+public class Brigand : Unit 
 {
-
     // Start is called before the first frame update
     protected override void Start()
     {
         level = 1;
         exp = 0;
-        hp = 16;
-        strength = 4;
-        skill = 7;
-        speed = 9;
-        luck = 5;
-        defense = 2;
+        hp = 20;
+        strength = 5;
+        skill = 1;
+        speed = 5;
+        luck = 0;
+        defense = 3;
         resistance = 0;
-        constitution = 5;
+        constitution = 12;
         move = 5;
 
-        characterOffset = new Vector3(0.6f,0.062f,0f);
+        characterOffset = new Vector3(0.6f,0f,0f);
 
         base.Start();
     }
-
-    // Update is called once per frame
-    
 }

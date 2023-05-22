@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8133260097049142325}
   - component: {fileID: 5450782258038654234}
   m_Layer: 0
-  m_Name: Character
+  m_Name: Lyn Lord
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
