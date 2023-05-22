@@ -20,6 +20,7 @@ public class Brigand : Unit
         move = 5;
 
         characterOffset = new Vector3(0.6f,0f,0f);
+        equippedWeapon = new IronSword();
 
         base.Start();
     }

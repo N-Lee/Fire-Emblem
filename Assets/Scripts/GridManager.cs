@@ -157,7 +157,8 @@ public class GridManager : MonoBehaviour
     void MenuPhase()
     {
         List<string> menuOptions = new List<string>();
-        if (selectedCharacter.equippedWeapon.weaponType != WeaponType.empty)
+        attackNodes = movementController.GetAttackTilesDuringAttack(selectedCharacter.equippedWeapon.minRange, selectedCharacter.equippedWeapon.maxRange,moveTilemap.WorldToCell(selectedCharacter.gameObject.transform.position));
+        if (selectedCharacter.equippedWeapon.weaponType != WeaponType.empty && IsInRange(true))
         {
             menuOptions.Add("Attack");
         }
@@ -225,10 +226,29 @@ public class GridManager : MonoBehaviour
 
     public void AttackButton()
     {
-        movementController.GetAttackTilesDuringAttack(1,1,moveTilemap.WorldToCell(selectedCharacter.gameObject.transform.position));
         actionMenu.Hide();
         actionMenuOptions = ActionMenuOptions.Attack;
         userPhase = UserPhase.Action;
+    }
+
+    bool IsInRange(bool IsEnemy)
+    {
+        foreach (Node node in attackNodes)
+        {
+            Collider2D targetObject = Physics2D.OverlapPoint(new Vector3(node.Position.x + 0.2f, node.Position.y + 0.2f, node.Position.z));
+
+            if (IsEnemy && targetObject && targetObject.transform.gameObject.tag == "Enemy")
+            {
+                return true;
+            }
+
+            if (!IsEnemy && targetObject && targetObject.transform.gameObject.tag == "Player")
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void DebugAStar()
