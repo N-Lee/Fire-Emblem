@@ -19,8 +19,10 @@ public class Lyn : Unit
         resistance = 0;
         constitution = 5;
         move = 5;
+        SetClass(new LordClass(), false);
 
         characterOffset = new Vector3(0.6f,0.062f,0f);
+        equippedWeapon = new IronSword();
 
         base.Start();
     }

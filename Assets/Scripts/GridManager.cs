@@ -86,14 +86,15 @@ public class GridManager : MonoBehaviour
 
             if (targetObject && targetObject.transform.gameObject.tag == "Player")
             {
+                selectedCharacter = targetObject.transform.gameObject.GetComponent<Unit>();
+
                 startPos = moveTilemap.WorldToCell(mousePos);
                 movementController.startPos = startPos;
-                movementNodes = movementController.GetMovementTiles(10);
-                attackNodes = movementController.GetAttackTilesDuringMove(1,1);
+                movementNodes = movementController.GetMovementTiles(selectedCharacter.move);
+                attackNodes = movementController.GetAttackTilesDuringMove(selectedCharacter.equippedWeapon.minRange, selectedCharacter.equippedWeapon.maxRange);
 
-                selectedCharacter = targetObject.transform.gameObject.GetComponent<Unit>();
-                userPhase = UserPhase.CharacterMove;
                 cursorController.ShowCursor(false);
+                userPhase = UserPhase.CharacterMove;
             }
             else
             {
@@ -132,6 +133,7 @@ public class GridManager : MonoBehaviour
                     userPhase = UserPhase.Menu;
                     return;
                 }
+
                 selectedCharacter.SetPath(path);
                 RemoveMovementUI();
                 isMoving = true;
@@ -141,6 +143,7 @@ public class GridManager : MonoBehaviour
             {
                 DeselectCharacter();
                 RemoveMovementUI();
+                selectedCharacter = null;
                 userPhase = UserPhase.Map;
             }
         }
@@ -153,7 +156,15 @@ public class GridManager : MonoBehaviour
     
     void MenuPhase()
     {
-        actionMenu.Show(new List<string> {"Attack"});
+        List<string> menuOptions = new List<string>();
+        if (selectedCharacter.equippedWeapon.weaponType != WeaponType.empty)
+        {
+            menuOptions.Add("Attack");
+        }
+
+        menuOptions.Add("Wait");
+
+        actionMenu.Show(menuOptions);
         actionMenu.MoveMenu(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
     }
 
@@ -164,7 +175,7 @@ public class GridManager : MonoBehaviour
         switch(actionMenuOptions)
         {
             case ActionMenuOptions.Attack:
-                if (Input.GetMouseButtonDown(0) && targetObject && targetObject.transform.gameObject.tag == "Player")
+                if (Input.GetMouseButtonDown(0) && targetObject && targetObject.transform.gameObject.tag == "Enemy")
                 {
                     Debug.Log("Attack Unit");
                 }

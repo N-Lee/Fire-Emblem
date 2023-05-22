@@ -34,6 +34,15 @@ public class LordClass : UnitClass
         growthLuck = 45;
         growthDefense = 15;
         growthResistance = 20;
+
+        isPromoted = false;
+        isThief = false;
+        classPower = 3;
+        classBonusA = 0;
+        classBonusB = 0;
+
+        useableWeapon = new Dictionary<WeaponType, int>();
+        useableWeapon.Add(WeaponType.sword, 31);
     }
 
     // Update is called once per frame

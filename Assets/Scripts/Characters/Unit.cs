@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    // Stats
     public int level, exp, hp, strength, skill, speed, luck, defense, resistance, constitution, move;
     public UnitClass unitClass;
     public bool isBoss;
-    IDictionary<string, int> weapons;
+    List<Weapon> weapons;
+    public Weapon equippedWeapon;
+    Dictionary<WeaponType, int> weaponLevel;
+
+    // Unity values
     float moveSpeed = 5f;
     Vector3 characterPosition;
     protected Vector3 characterOffset;
@@ -18,7 +23,7 @@ public class Unit : MonoBehaviour
     Animator animator;
     SpriteRenderer spriteRenderer;
 
-    // NOTES: Weapon EXP: Get 2 per attack (4 if the attacks twice in one turn). Start at 1 (E). 31 is D. 71 is C (+40). 121 is B. 181 is A. 251 is S 
+    // NOTES: Weapon EXP: Get a certain amount based on weapon per attack (4 if the attacks twice in one turn). Start at 1 (E). 31 is D. 71 is C (+40). 121 is B. 181 is A. 251 is S 
     // Weapon rank bonus https://fireemblem.fandom.com/wiki/Weapon_Level
 
     protected virtual void Start()
@@ -41,41 +46,39 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void SetClass(UnitClass newClass)
+    public void SetClass(UnitClass newClass, bool isPromotion)
     {
-        unitClass = newClass;
-        bool emptyWeapons = weapons.Count == 0 ? true : false;
-
-        for (int i = 0; i < unitClass.weapons.Count; i++)
+        if (!isPromotion)
         {
-            string weaponName = unitClass.weapons[i];
-            int baseWeaponLevel = unitClass.baseWeaponLevel[i];
+            unitClass = newClass;
+            return;
+        }
 
-            if (emptyWeapons)
+        foreach (KeyValuePair<WeaponType, int> promoteWeapon in unitClass.useableWeapon)
+        {
+            if (!weaponLevel.ContainsKey(promoteWeapon.Key))
             {
-                weapons.Add(weaponName, baseWeaponLevel);
-                continue;
+                weaponLevel.Add(promoteWeapon.Key, promoteWeapon.Value);
+                break;
             }
 
-            for (int j = 0; j < weapons.Count; j++)
+            foreach (KeyValuePair<WeaponType, int> unitWeapon in weaponLevel)
             {
-                if (weapons.ContainsKey(weaponName))
+                if (promoteWeapon.Key == unitWeapon.Key && promoteWeapon.Value > unitWeapon.Value)
                 {
-                    weapons[weaponName] = weapons[weaponName] > baseWeaponLevel ? weapons[weaponName]: baseWeaponLevel;
-                }
-                else 
-                {
-                    weapons.Add(weaponName, baseWeaponLevel);
+                    weaponLevel[promoteWeapon.Key] = promoteWeapon.Value;
                 }
             }
         }
+
+        unitClass = newClass;
     }
 
     public int AttackDamage(int enemyDef, int enemyRes, int weaponTriangle)
     {
         int damage = 0;
 
-        if (unitClass.isPhysical)
+        if (equippedWeapon.isPhysical)
         {
             damage = strength - enemyDef;
         }
@@ -92,19 +95,19 @@ public class Unit : MonoBehaviour
         return speed - enemySpeed >= 5 ? 2 : 1;
     }
 
-    public int CritRate(int weaponCrit)
+    public float CritRate(int weaponCrit)
     {
-        return skill/2 + weaponCrit;
+        return (skill/2 + weaponCrit) / 100;
     }
 
-    public int HitRate(int weaponHit)
+    public float HitRate(int weaponHit)
     {
-        return ((skill * 3 + luck) / 2) + weaponHit;
+        return (((skill * 3 + luck) / 2) + weaponHit) / 100;
     }
 
-    public int AvoidRate(int weaponTriangle)
+    public float AvoidRate(int weaponTriangle)
     {
-        return ((speed * 3 + luck) / 2) + weaponTriangle;
+        return (((speed * 3 + luck) / 2) + weaponTriangle) / 100;
     }
 
     public int calculateWeaponEXP(int hitsLanded)
@@ -190,5 +193,15 @@ public class Unit : MonoBehaviour
         this.path = path;
         pathCount = path.Count - 1;
         isCharacterMoving = true;
+    }
+
+    public bool IsWeaponUseable(Weapon weapon)
+    {
+        if (unitClass.useableWeapon.ContainsKey(weapon.weaponType))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
