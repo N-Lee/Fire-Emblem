@@ -16,8 +16,9 @@ public class IronSword : Weapon
         weaponExp = 1;
         cost = 460;
         rank = 'E';
-        naming = "Iron Sword";
+        name = "Iron Sword";
         weaponType = WeaponType.sword;
         isPhysical = true;
+        imageLocation = "Assets/Art/Image/Weapons/Iron Sword.png";
     }
 }

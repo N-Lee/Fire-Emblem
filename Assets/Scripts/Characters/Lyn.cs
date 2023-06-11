@@ -10,8 +10,9 @@ public class Lyn : Unit
     {
         level = 1;
         exp = 0;
-        hp = 16;
-        strength = 4;
+        maxHp = 16;
+        currentHp = 16;
+        might = 4;
         skill = 7;
         speed = 9;
         luck = 5;
@@ -19,6 +20,7 @@ public class Lyn : Unit
         resistance = 0;
         constitution = 5;
         move = 5;
+        terrain = 0;
         SetClass(new LordClass(), false);
 
         characterOffset = new Vector3(0.6f,0.062f,0f);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-// TODO: Finish Brigand mapping
+// TODO: 
 
 enum UserPhase {Map, CharacterMove, Menu, Action, Battle};
 public enum ActionMenuOptions{Attack, Staff, Rescue, Item, Trade, Wait};
@@ -15,8 +15,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] CursorController cursorController;
     [SerializeField] Tilemap groundTilemap, moveTilemap;
     [SerializeField] List<TileData> tileDatas;
-    [SerializeField] GameObject actionMenuObj;
-    ActionMenu actionMenu;
+    [SerializeField] ActionMenu actionMenu;
+    [SerializeField] CombatForecast combatForecastMenu;
     Dictionary<TileBase, TileData> dataFromTiles;
     Unit selectedCharacter;
     HashSet<Node> movementNodes = new HashSet<Node>();
@@ -28,7 +28,6 @@ public class GridManager : MonoBehaviour
     bool isArrowDrawn = false;
     bool isMoving = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         dataFromTiles = new Dictionary<TileBase, TileData>();
@@ -49,8 +48,6 @@ public class GridManager : MonoBehaviour
         movementController = gameObject.AddComponent<MovementController>();
         movementController.groundTilemap = groundTilemap;
         movementController.dataFromTiles = dataFromTiles;
-
-        actionMenu = actionMenuObj.GetComponent<ActionMenu>();
     }
 
     // Update is called once per frame
@@ -98,9 +95,7 @@ public class GridManager : MonoBehaviour
             }
             else
             {
-                Vector3Int gridPosition = groundTilemap.WorldToCell(mousePos);
-                TileBase clickedTile = groundTilemap.GetTile(gridPosition);
-                bool isWalkable = dataFromTiles[clickedTile].isWalkable;
+                Debug.Log("Open Options Menu");
             }
         }
     }
@@ -151,13 +146,15 @@ public class GridManager : MonoBehaviour
         if (isMoving && !selectedCharacter.isCharacterMoving)
         {
             userPhase = UserPhase.Menu;
+            isMoving = false;
         }
     }
     
     void MenuPhase()
     {
         List<string> menuOptions = new List<string>();
-        attackNodes = movementController.GetAttackTilesDuringAttack(selectedCharacter.equippedWeapon.minRange, selectedCharacter.equippedWeapon.maxRange,moveTilemap.WorldToCell(selectedCharacter.gameObject.transform.position));
+        attackNodes = movementController.GetAttackTilesDuringAttack(selectedCharacter.equippedWeapon.minRange, selectedCharacter.equippedWeapon.maxRange, moveTilemap.WorldToCell(selectedCharacter.gameObject.transform.position));
+
         if (selectedCharacter.equippedWeapon.weaponType != WeaponType.empty && IsInRange(true))
         {
             menuOptions.Add("Attack");
@@ -165,8 +162,7 @@ public class GridManager : MonoBehaviour
 
         menuOptions.Add("Wait");
 
-        actionMenu.Show(menuOptions);
-        actionMenu.MoveMenu(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
+        actionMenu.Show(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position), menuOptions);
     }
 
     void ActionPhase(Vector3 mousePos)
@@ -176,15 +172,7 @@ public class GridManager : MonoBehaviour
         switch(actionMenuOptions)
         {
             case ActionMenuOptions.Attack:
-                if (Input.GetMouseButtonDown(0) && targetObject && targetObject.transform.gameObject.tag == "Enemy")
-                {
-                    Debug.Log("Attack Unit");
-                }
-                else if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-                {
-                    RemoveMovementUI();
-                    userPhase = UserPhase.CharacterMove;
-                }
+                ActionPhaseAttack(targetObject);
                 break;
 
             case ActionMenuOptions.Staff:
@@ -224,12 +212,30 @@ public class GridManager : MonoBehaviour
         movementController.Reset();
     }
 
+    #region Action menu buttons
     public void AttackButton()
     {
         actionMenu.Hide();
         actionMenuOptions = ActionMenuOptions.Attack;
         userPhase = UserPhase.Action;
     }
+    #endregion
+
+    #region Action phase options
+    void ActionPhaseAttack(Collider2D targetObject)
+    {
+        if (Input.GetMouseButtonDown(0) && targetObject && targetObject.transform.gameObject.tag == "Enemy")
+        {
+            combatForecastMenu.GetUnits(selectedCharacter, targetObject.GetComponent<Unit>());
+            combatForecastMenu.Show(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
+        }
+        else if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        {
+            RemoveMovementUI();
+            userPhase = UserPhase.CharacterMove;
+        }
+    }
+    #endregion
 
     bool IsInRange(bool IsEnemy)
     {

@@ -5,10 +5,10 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     // Stats
-    public int level, exp, hp, strength, skill, speed, luck, defense, resistance, constitution, move;
+    public int level, exp, maxHp, currentHp, might, skill, speed, luck, defense, resistance, constitution, move, terrain;
     public UnitClass unitClass;
     public bool isBoss;
-    List<Weapon> weapons;
+    CharacterInventory inventory;
     public Weapon equippedWeapon;
     Dictionary<WeaponType, int> weaponLevel;
 
@@ -31,6 +31,7 @@ public class Unit : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         isCharacterMoving = isDown = isLeft = isRight = isUp = false;
+        inventory = new CharacterInventory(this);
     }
 
     protected virtual void Update()
@@ -80,11 +81,11 @@ public class Unit : MonoBehaviour
 
         if (equippedWeapon.isPhysical)
         {
-            damage = strength - enemyDef;
+            damage = might - enemyDef;
         }
         else
         {
-            damage = strength - enemyRes;
+            damage = might - enemyRes;
         }
 
         return damage + weaponTriangle;
@@ -95,19 +96,46 @@ public class Unit : MonoBehaviour
         return speed - enemySpeed >= 5 ? 2 : 1;
     }
 
-    public float CritRate(int weaponCrit)
+    public double CritRate()
     {
-        return (skill/2 + weaponCrit) / 100;
+        double crit = (skill/2 + equippedWeapon.critRate);
+
+        if (crit > 100)
+        {
+            crit = 100;
+        }
+        else if (crit < 0)
+        {
+            crit = 0;
+        }
+
+        return crit;
     }
 
-    public float HitRate(int weaponHit)
+    double HitRate()
     {
-        return (((skill * 3 + luck) / 2) + weaponHit) / 100;
+        return ((skill * 2) + (luck * 0.5))  + equippedWeapon.hitRate;
     }
 
-    public float AvoidRate(int weaponTriangle)
+    double AvoidRate()
     {
-        return (((speed * 3 + luck) / 2) + weaponTriangle) / 100;
+        return (speed * 2) + luck + terrain;
+    }
+
+    public double DisplayedHitRate()
+    {
+        double hit = HitRate() - AvoidRate();
+
+        if (hit > 100)
+        {
+            hit = 100;
+        }
+        else if (hit < 0)
+        {
+            hit = 0;
+        }
+
+        return hit;
     }
 
     public int calculateWeaponEXP(int hitsLanded)

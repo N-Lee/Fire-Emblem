@@ -16,7 +16,7 @@ public class NoWeapon : Weapon
         weaponExp = 0;
         cost = 0;
         rank = 'E';
-        naming = "No Weapon";
+        name = "No Weapon";
         weaponType = WeaponType.empty;
         isPhysical = true; 
     }

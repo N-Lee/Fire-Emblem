@@ -3,49 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActionMenu : MonoBehaviour
+public class ActionMenu : Menu
 {
     [SerializeField] Button attack, staff, rescue, item, trade, wait;
-    [SerializeField] GridManager gridManager;
     public bool phaseEnd;
-    RectTransform rectTransform;
-    Vector3 menuOffset = new Vector3(30, -200, 0);
-    float leftXOffset = 40f;
 
-    void Update()
-    {
-        
-    }
-    
-    public void MoveMenu(Vector3 unitPosition)
-    {
-        if (!rectTransform)
-        {
-            rectTransform = GetComponent<RectTransform>();
-        }
-        if (Screen.width/2 > unitPosition.x)
-        {
-            rectTransform.anchorMax = new Vector2(1,1);
-            rectTransform.anchorMin = new Vector2(1,1);
-            rectTransform.pivot = new Vector2(1,1);
-            rectTransform.anchoredPosition = new Vector3(menuOffset.x * -1, menuOffset.y, 0);
-        }
-        else 
-        {
-            rectTransform.anchorMax = new Vector2(0,1);
-            rectTransform.anchorMin = new Vector2(0,1);
-            rectTransform.pivot = new Vector2(0,1);
-            rectTransform.anchoredPosition = menuOffset;
-        }
-    }
-
-    public void Show(List<string> options)
+    public void Show(Vector3 unitPosition, List<string> options)
     {
         gameObject.SetActive(true);
         SelectOptions(options);
+        MoveMenu(unitPosition);
     }
 
-    public void Hide()
+    public override void Hide()
     {
         gameObject.SetActive(false);
         attack.gameObject.SetActive(false);
