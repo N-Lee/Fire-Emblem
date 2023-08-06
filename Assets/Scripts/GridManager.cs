@@ -17,6 +17,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] List<TileData> tileDatas;
     [SerializeField] ActionMenu actionMenu;
     [SerializeField] CombatForecast combatForecastMenu;
+    [SerializeField] InventoryMenu inventoryMenu;
     Dictionary<TileBase, TileData> dataFromTiles;
     Unit selectedCharacter;
     HashSet<Node> movementNodes = new HashSet<Node>();
@@ -88,6 +89,7 @@ public class GridManager : MonoBehaviour
                 startPos = moveTilemap.WorldToCell(mousePos);
                 movementController.startPos = startPos;
                 movementNodes = movementController.GetMovementTiles(selectedCharacter.move);
+
                 attackNodes = movementController.GetAttackTilesDuringMove(selectedCharacter.equippedWeapon.minRange, selectedCharacter.equippedWeapon.maxRange);
 
                 cursorController.ShowCursor(false);
@@ -221,13 +223,25 @@ public class GridManager : MonoBehaviour
     }
     #endregion
 
+    public Weapon WeaponButton()
+    {
+        inventoryMenu.Hide();
+        Weapon weapon = new Weapon();
+        return weapon;
+    }
+
+    public void ShowCombatForecaseMenu(Collider2D targetObject)
+    {
+            combatForecastMenu.GetUnits(selectedCharacter, targetObject.GetComponent<Unit>());
+            combatForecastMenu.Show(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
+    }
+
     #region Action phase options
     void ActionPhaseAttack(Collider2D targetObject)
     {
         if (Input.GetMouseButtonDown(0) && targetObject && targetObject.transform.gameObject.tag == "Enemy")
         {
-            combatForecastMenu.GetUnits(selectedCharacter, targetObject.GetComponent<Unit>());
-            combatForecastMenu.Show(Camera.main.WorldToScreenPoint(selectedCharacter.gameObject.transform.position));
+            inventoryMenu.Show(selectedCharacter, targetObject);
         }
         else if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {

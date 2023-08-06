@@ -19,6 +19,6 @@ public class IronSword : Weapon
         name = "Iron Sword";
         weaponType = WeaponType.sword;
         isPhysical = true;
-        imageLocation = "Assets/Art/Image/Weapons/Iron Sword.png";
+        imageLocation = "Image/Weapons/IronSword";
     }
 }

@@ -11,16 +11,24 @@ public class CharacterInventory : MonoBehaviour
     public CharacterInventory(Unit unit)
     {
         this.unit = unit;
+        weapons = new List<Weapon>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void AddWeapon(Weapon newWeapon)
     {
-        
+        weapons.Add(newWeapon);
     }
 
-    public void EquipWeapon()
+    public void EquipWeapon(Weapon selectedWeapon)
     {
-        
+        int index = weapons.IndexOf(selectedWeapon);
+        weapons.RemoveAt(index);
+        weapons.Insert(0, selectedWeapon);
+        unit.equippedWeapon = weapons[0];
+    }
+
+    public Weapon EquippedWeapon()
+    {
+        return weapons[0];
     }
 }

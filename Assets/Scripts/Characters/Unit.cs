@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     public int level, exp, maxHp, currentHp, might, skill, speed, luck, defense, resistance, constitution, move, terrain;
     public UnitClass unitClass;
     public bool isBoss;
-    CharacterInventory inventory;
+    public CharacterInventory inventory;
     public Weapon equippedWeapon;
     Dictionary<WeaponType, int> weaponLevel;
 

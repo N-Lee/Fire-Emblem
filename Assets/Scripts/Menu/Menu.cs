@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
-    [SerializeField] GridManager gridManager;
+    [SerializeField] protected GridManager gridManager;
     RectTransform rectTransform;
     Vector3 menuOffset = new Vector3(30, -200, 0);
     float leftXOffset = 40f;

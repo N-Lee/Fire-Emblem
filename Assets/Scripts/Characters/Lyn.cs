@@ -27,8 +27,13 @@ public class Lyn : Unit
         equippedWeapon = new IronSword();
 
         base.Start();
+
+        Weapon ironSword = new IronSword();
+        Weapon ironAxe = new IronAxe();
+        inventory.AddWeapon(ironSword);
+        inventory.AddWeapon(ironAxe);
+        equippedWeapon = inventory.EquippedWeapon();
     }
 
-    // Update is called once per frame
-    
+
 }

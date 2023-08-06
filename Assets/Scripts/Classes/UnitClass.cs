@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class UnitClass : MonoBehaviour
 {
+    public string name;
     public int baseHp, basestrength, baseSkill, baseSpeed, baseLuck, baseDefense, baseResistance, baseConstitution, baseMove;
     public int maxHp, maxstrength, maxSkill, maxSpeed, maxLuck, maxDefense, maxResistance, maxConstitution, maxMove;
     public int growthHp, growthstrength, growthSkill, growthSpeed, growthLuck, growthDefense, growthResistance;

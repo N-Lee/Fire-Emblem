@@ -58,12 +58,12 @@ public class CombatForecast : Menu
         if (advantage == 1)
         {
             pAdvantage.color = new Color32(0, 255, 0, 100);
-            eAdvantage.color = new Color32(255, 0, 0, 100);
+            eAdvantage.color = new Color32(255, 0, 0, 200);
         }
         else if (advantage == -1)
         {
-            pAdvantage.color = new Color32(0, 255, 0, 100);
-            eAdvantage.color = new Color32(255, 0, 0, 100);
+            pAdvantage.color = new Color32(255, 0, 0, 100);
+            eAdvantage.color = new Color32(0, 255, 0, 100);
         }
         else if (advantage == 0)
         {

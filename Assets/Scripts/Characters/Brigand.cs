@@ -22,7 +22,7 @@ public class Brigand : Unit
         terrain = 0;
 
         characterOffset = new Vector3(0.6f,0f,0f);
-        equippedWeapon = new IronSword();
+        equippedWeapon = new IronAxe();
 
         base.Start();
     }

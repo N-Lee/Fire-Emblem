@@ -5,8 +5,9 @@ using UnityEngine;
 public class LordClass : UnitClass
 {
     // Start is called before the first frame update
-    void Start()
+    public LordClass()
     {
+        name = "Lord";
         baseHp = 16;
         basestrength = 4;
         baseSkill = 7;
@@ -43,11 +44,5 @@ public class LordClass : UnitClass
 
         useableWeapon = new Dictionary<WeaponType, int>();
         useableWeapon.Add(WeaponType.sword, 31);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
