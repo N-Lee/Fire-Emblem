@@ -7,7 +7,6 @@ using TMPro;
 public class InventoryMenu : Menu
 {
     public GameObject inventoryItemPrefab;
-    List<GameObject> inventoryItems;
     Collider2D targetObject;
     Unit character;
     public void Show(Unit character, Collider2D targetObject)
@@ -16,7 +15,6 @@ public class InventoryMenu : Menu
         this.targetObject = targetObject;
 
         gameObject.SetActive(true);
-        inventoryItems = new List<GameObject>();
         ShowListOfWeapons(character.inventory.weapons);
     }
 
@@ -25,28 +23,26 @@ public class InventoryMenu : Menu
         foreach (Weapon w in weaponList)
         {
             GameObject newWeaponItem = Instantiate(inventoryItemPrefab, transform);
+            newWeaponItem.GetComponent<InventoryButton>().weapon = w;
             Image icon = newWeaponItem.transform.GetChild(0).GetComponent<Image>();
             TMP_Text name = newWeaponItem.transform.GetChild(1).GetComponent<TMP_Text>();
             TMP_Text durability = newWeaponItem.transform.GetChild(2).GetComponent<TMP_Text>();
         
-            /* TODO: Show menu
-            if (character.IsWeaponUseable(w))
-            {
-                newWeaponItem.GetComponent<Button>().onClick.AddListener(() => Hide());
-            }
-            else
-            {
-                
-            }
-            */
-
-            // REMOVE WHEN TODO IS DONE ============================================ 
-            newWeaponItem.GetComponent<Button>().onClick.AddListener(() => Hide(w));
-            // =====================================================================
-
             icon.sprite = Resources.Load <Sprite>(w.imageLocation);
             name.text = w.name;
             durability.text = w.durabilty.ToString();
+
+            if (character.IsWeaponUseable(w))
+            {   
+                name.color = new Color(255, 255, 255, 1f);
+                durability.color = new Color(255, 255, 255, 1f);
+                newWeaponItem.GetComponent<Button>().onClick.AddListener(() => Hide(w));
+            }
+            else
+            {
+                name.color = new Color(255, 255, 255, 0.3f);
+                durability.color = new Color(255, 255, 255, 0.3f);
+            }
         }
     }
 
@@ -54,6 +50,7 @@ public class InventoryMenu : Menu
     {
         character.inventory.EquipWeapon(weapon);
         gameObject.SetActive(false);
+        GameObject.Find("WeaponDescriptionMenu").GetComponent<WeaponDescriptionMenu>().Hide();
         gridManager.ShowCombatForecaseMenu(targetObject);
     }
 }

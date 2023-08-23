@@ -8,6 +8,7 @@ public class Menu : MonoBehaviour
     RectTransform rectTransform;
     Vector3 menuOffset = new Vector3(30, -200, 0);
     float leftXOffset = 40f;
+    bool isRightSide = false;
     
     public void MoveMenu(Vector3 unitPosition)
     {
@@ -21,6 +22,7 @@ public class Menu : MonoBehaviour
             rectTransform.anchorMin = new Vector2(1,1);
             rectTransform.pivot = new Vector2(1,1);
             rectTransform.anchoredPosition = new Vector3(menuOffset.x * -1, menuOffset.y, 0);
+            isRightSide = true;
         }
         else 
         {
@@ -28,6 +30,7 @@ public class Menu : MonoBehaviour
             rectTransform.anchorMin = new Vector2(0,1);
             rectTransform.pivot = new Vector2(0,1);
             rectTransform.anchoredPosition = menuOffset;
+            isRightSide = false;
         }
     }
 
@@ -42,5 +45,9 @@ public class Menu : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public bool IsRightSide()
+    {
+        return isRightSide;
+    }
     
 }

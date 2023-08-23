@@ -19,7 +19,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] CombatForecast combatForecastMenu;
     [SerializeField] InventoryMenu inventoryMenu;
     Dictionary<TileBase, TileData> dataFromTiles;
-    Unit selectedCharacter;
+    public Unit selectedCharacter;
     HashSet<Node> movementNodes = new HashSet<Node>();
     HashSet<Node> attackNodes = new HashSet<Node>();
     List<Node> path = new List<Node>();
@@ -140,7 +140,6 @@ public class GridManager : MonoBehaviour
             {
                 DeselectCharacter();
                 RemoveMovementUI();
-                selectedCharacter = null;
                 userPhase = UserPhase.Map;
             }
         }

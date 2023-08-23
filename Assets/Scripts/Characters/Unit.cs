@@ -117,7 +117,7 @@ public class Unit : MonoBehaviour
         return ((skill * 2) + (luck * 0.5))  + equippedWeapon.hitRate;
     }
 
-    double AvoidRate()
+    public double AvoidRate()
     {
         return (speed * 2) + luck + terrain;
     }
